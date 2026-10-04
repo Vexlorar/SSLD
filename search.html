@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="color-scheme" content="only light">
+    <meta name="theme-color" content="#ffffff">
+    <title>MOD WORLD — Search</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://i.postimg.cc">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            color-scheme: only light;
+            --bg    : #edf0f7;
+            --sur   : #f2f5fc;
+            --sd    : #c5c9d8;
+            --sl    : #ffffff;
+            --txt   : #1a1d2b;
+            --txt2  : #7a7e92;
+            --red   : #e8192c;
+            --redg  : rgba(232, 25, 44, 0.2);
+            --reds  : rgba(232, 25, 44, 0.08);
+            --ylw   : #ff9500;
+            --blu   : #007aff;
+
+            --neu-in : inset 4px 4px 10px var(--sd), inset -3px -3px 7px var(--sl);
+            --neu    : 8px 8px 18px var(--sd), -5px -5px 12px var(--sl);
+            --neu-sm : 4px 4px 10px var(--sd), -3px -3px 7px var(--sl);
+            --card3d : 0 2px 0 rgba(255,255,255,0.95) inset,
+                       0 10px 22px rgba(0,0,0,0.11),
+                       0 4px 8px rgba(0,0,0,0.07),
+                       0 1px 3px rgba(0,0,0,0.05);
+            --logo3d : 0 6px 10px rgba(0,0,0,0.18),
+                       0 14px 30px rgba(0,0,0,0.15),
+                       0 2px 0 rgba(255,255,255,0.9) inset;
+
+            --hdr-ease : 0.22s;
+        }
+
+        * {
+            box-sizing : border-box;
+            margin     : 0;
+            padding    : 0;
+            -webkit-tap-highlight-color : transparent;
+        }
+
+        html, body {
+            height      : 100%;
+            background  : var(--bg);
+            font-family : 'Plus Jakarta Sans', sans-serif;
+            color       : var(--txt);
+            overflow    : hidden;
+            -webkit-text-size-adjust : 100%;
+        }
+
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--sd); border-radius: 10px; }
+
+        mark {
+            background   : rgba(232, 25, 44, 0.14);
+            color        : var(--red);
+            border-radius: 3px;
+            padding      : 0 1px;
+        }
+
+        /* ---------- PAGE ---------- */
+        .page {
+            display    : none;
+            height     : 100vh;
+            height     : 100dvh;
+            overflow-y : auto;
+            overflow-x : hidden;
+            -webkit-overflow-scrolling : touch;
+            scroll-behavior            : smooth;
+            overscroll-behavior-y      : none;
+            padding-bottom             : 40px;
+        }
+        .page.active { display: block; }
+
+        /* ---------- HEADER ---------- */
+        .hdr {
+            background      : #ffffff;
+            padding         : 12px 16px;
+            display         : flex;
+            align-items     : center;
+            justify-content : space-between;
+            position        : sticky;
+            top             : 0;
+            z-index         : 100;
+            box-shadow      : 0 2px 12px rgba(0,0,0,0.10);
+            transform       : translate3d(0,0,0);
+            will-change     : transform;
+            transition      : transform var(--hdr-ease) cubic-bezier(0.4, 0, 0.2, 1);
+            backface-visibility        : hidden;
+            -webkit-backface-visibility: hidden;
+        }
+
+        .hdr-nav { display: flex; align-items: center; gap: 12px; }
+
+        .hbtn {
+            width: 36px; height: 36px;
+            border-radius: 11px;
+            background: var(--bg);
+            box-shadow: var(--neu-in);
+            border: none;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            color: var(--txt2);
+            transition: transform .15s ease, box-shadow .15s ease;
+            flex-shrink: 0;
+        }
+        .hbtn:active { transform: scale(0.92); box-shadow: var(--neu); }
+
+        /* ---------- SEARCH INPUT ---------- */
+        .srch-in-wrap {
+            background: var(--bg);
+            box-shadow: var(--neu-in);
+            border-radius: 16px;
+            padding: 2px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: text;
+        }
+        .srch-in-wrap > svg.mag {
+            width: 18px; height: 18px;
+            stroke: var(--txt2); fill: none;
+            stroke-width: 2.3; stroke-linecap: round; stroke-linejoin: round;
+            flex-shrink: 0;
+        }
+        .srch-in-wrap input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 13px 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--txt);
+            outline: none;
+            min-width: 0;
+        }
+        .srch-in-wrap input::placeholder { color: var(--txt2); }
+
+        /* Completely remove browser's default search cancel button */
+        .srch-in-wrap input::-webkit-search-cancel-button,
+        .srch-in-wrap input::-webkit-search-decoration {
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        /* Custom clear (cross) button style */
+        .srch-in-x {
+            cursor: pointer;
+            width: 26px; height: 26px;
+            border-radius: 9px;
+            background: var(--sur);
+            box-shadow: var(--neu-sm);
+            display: none;
+            align-items: center; justify-content: center;
+            flex-shrink: 0;
+            border: none;
+        }
+        .srch-in-x.visible { display: flex; }
+        .srch-in-x:active { transform: scale(.92); }
+        .srch-in-x svg { width: 12px; height: 12px; stroke: var(--red); fill: none; stroke-width: 2.5; }
+
+        /* ---------- SECTION HEADER ---------- */
+        .sec-hdr {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 16px 8px;
+        }
+        .sec-title { font-size: 17px; font-weight: 900; letter-spacing: -0.2px; }
+        .view-all {
+            font-size: 11px; font-weight: 800;
+            color: var(--red);
+            background: var(--reds);
+            padding: 4px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .view-all:active { background: var(--redg); }
+
+        /* ---------- RECENT SEARCH CHIPS ---------- */
+        .hist-chip {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--bg);
+            box-shadow: inset 4px 4px 9px var(--sd), inset -3px -3px 7px var(--sl);
+            border-radius: 18px;
+            padding: 8px 13px;
+            cursor: pointer;
+            transition: transform 0.12s;
+        }
+        .hist-chip:active { transform: scale(0.95); }
+        .hist-chip svg.h-clock {
+            width: 11px; height: 11px;
+            stroke: var(--txt2); fill: none;
+            stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+            flex-shrink: 0;
+        }
+        .hist-chip span.h-txt {
+            font-size: 11px; font-weight: 700; color: var(--txt);
+            max-width: 130px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        }
+        .hist-chip .h-x {
+            font-size: 14px; color: var(--txt2);
+            line-height: 1; cursor: pointer; padding-left: 2px;
+        }
+
+        /* ---------- TRENDING SEARCH ROWS ---------- */
+        .trend-srch-row {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            background: var(--bg);
+            box-shadow: inset 5px 5px 11px var(--sd), inset -4px -4px 9px var(--sl);
+            border-radius: 15px;
+            padding: 11px 14px;
+            cursor: pointer;
+            transition: transform 0.12s;
+        }
+        .trend-srch-row:active { transform: scale(0.97); }
+        .trend-srch-row .tsr-rank {
+            font-size: 12px; font-weight: 900; color: var(--red);
+            width: 18px; height: 18px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 6px;
+            background: var(--sur);
+            box-shadow: 2px 2px 5px var(--sd), -2px -2px 5px var(--sl);
+            flex-shrink: 0;
+        }
+        .trend-srch-row .tsr-ic {
+            width: 28px; height: 28px;
+            border-radius: 9px;
+            background: linear-gradient(145deg, #ff4040, #cc0000);
+            box-shadow: 0 2px 0 #900000, inset 0 1px 0 rgba(255,255,255,0.25);
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .trend-srch-row .tsr-ic svg {
+            width: 14px; height: 14px; stroke: #fff; fill: none;
+            stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round;
+        }
+        .trend-srch-row .tsr-txt {
+            flex: 1; font-size: 12px; font-weight: 700; color: var(--txt);
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+
+        /* ---------- APP LIST ITEM (search results) ---------- */
+        .ali {
+            background: linear-gradient(160deg, rgba(255,255,255,0.95), rgba(240,243,252,0.9));
+            border-top: 1.5px solid rgba(255,255,255,1);
+            border-left: 1.5px solid rgba(255,255,255,0.9);
+            border-right: 1.5px solid rgba(220,224,235,0.6);
+            border-bottom: 1.5px solid rgba(200,204,218,0.5);
+            box-shadow: var(--card3d);
+            border-radius: 14px;
+            padding: 11px 13px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s;
+            margin-bottom: 12px;
+        }
+        .ali:active {
+            transform: translateY(3px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.06);
+        }
+        .ali-logo {
+            width: 52px; height: 52px;
+            border-radius: 12px;
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 3px solid #fff;
+            box-shadow: var(--logo3d);
+            background: #e0e3ec;
+        }
+        .ali-info { flex: 1; min-width: 0; }
+        .ali-name {
+            font-size: 13px; font-weight: 800; margin-bottom: 1px;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .ali-dev { font-size: 10px; color: var(--txt2); font-weight: 600; margin-bottom: 4px; }
+        .ali-meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+        .ali-rat { font-size: 10px; font-weight: 800; color: var(--ylw); }
+        .ali-sz {
+            font-size: 9px; font-weight: 700;
+            background: var(--bg);
+            padding: 2px 8px;
+            border-radius: 7px;
+            color: var(--txt2);
+        }
+        .ali-btn {
+            background: linear-gradient(145deg, #e8192c, #bb0019);
+            color: #fff; border: none; border-radius: 10px;
+            width: 36px; height: 36px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; flex-shrink: 0;
+            box-shadow: 0 4px 0 #7a0011, 0 5px 12px rgba(232,25,44,0.3);
+            transition: transform .12s, box-shadow .12s;
+        }
+        .ali-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 #7a0011; }
+
+        /* ---------- EMPTY STATE ---------- */
+        .empty-st {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 50px 20px;
+            text-align: center;
+            gap: 12px;
+        }
+        .empty-ic {
+            width: 72px; height: 72px;
+            border-radius: 18px;
+            background: var(--sur);
+            box-shadow: var(--neu);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--txt2);
+        }
+        .empty-ic svg { width: 28px; height: 28px; stroke: var(--txt2); fill: none; stroke-width: 1.5; }
+    </style>
+</head>
+<body>
+
+    <div class="page active" id="pg-search">
+
+        <div class="hdr" id="searchHeader">
+            <div class="hdr-nav">
+                <button class="hbtn" type="button" aria-label="Back" onclick="goBackSearch()">
+                    <svg viewBox="0 0 24 24" style="width:17px; height:17px; stroke:var(--txt); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;">
+                        <polyline points="15 18 9 12 15 6"/>
+                    </svg>
+                </button>
+                <div style="font-size:17px; font-weight:900;">Search</div>
+            </div>
+        </div>
+
+        <div style="padding:14px 14px 4px;">
+            <div class="srch-in-wrap" id="ci-wrap">
+                <svg class="mag" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="search" id="ci" placeholder="Search apps, games, tools..."
+                       aria-label="Search apps" enterkeyhint="search"
+                       autocomplete="off" autocorrect="off" spellcheck="false">
+
+                <button class="srch-in-x" id="ci-x" type="button" aria-label="Clear search">
+                    <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <div id="csrch-sugg" style="display:none; padding:8px 14px 0;"></div>
+
+        <div id="csrch-default">
+
+            <div id="csrch-hist"></div>
+
+            <div class="sec-hdr" style="padding-top:14px;">
+                <div class="sec-title">Trending Searches</div>
+            </div>
+            <div style="padding:0 14px; display:flex; flex-direction:column; gap:8px;" id="csrch-trend"></div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        // =========================================
+        //  NAVIGATION HOOKS
+        // =========================================
+        function goBackSearch() {
+            if (document.referrer && document.referrer !== '') {
+                history.back();
+            } else {
+                window.location.href = 'index.html';
+            }
+        }
+
+        function openDP(id) { console.log('openDP →', id); }
+
+
+        // =========================================
+        //  APP DATA
+        // =========================================
+        const APPS = [
+            { id: 0,  name: 'Farming Simulator 20',           desc: 'Realistic Farm Simulation',     cat: 'Games',        img: 'https://i.postimg.cc/65JyFb7p/1709735747-farming-simulator-20.jpg', rt: '4.3', sz: '650 MB' },
+            { id: 1,  name: 'Asphalt 9: Legends',             desc: 'Arcade Racing Game',             cat: 'Games',        img: 'https://i.postimg.cc/76T72PVP/asphalt9.jpg', rt: '4.7', sz: '2.1 GB' },
+            { id: 2,  name: 'PUBG Mobile',                    desc: 'Battle Royale Shooter',          cat: 'Games',        img: 'https://i.postimg.cc/5yPqZ6vy/pubg.jpg', rt: '4.5', sz: '1.8 GB' },
+            { id: 3,  name: 'Gardenscapes',                   desc: 'Match-3 Puzzle Game',             cat: 'Games',        img: 'https://i.postimg.cc/8cZQ0y3N/gardenscapes.jpg', rt: '4.6', sz: '120 MB' },
+            { id: 4,  name: 'Subway Surfers',                 desc: 'Endless Runner',                 cat: 'Games',        img: 'https://i.postimg.cc/T2kpZGFB/subway.jpg', rt: '4.8', sz: '180 MB' },
+            { id: 5,  name: 'Picsart Pro',                    desc: 'AI Photo & Video Editor',        cat: 'Editors',      img: 'https://i.postimg.cc/FsTX07QJ/Picsart-26-05-21-13-50-32-520.jpg', rt: '4.7', sz: '85 MB' },
+            { id: 6,  name: 'CapCut Pro',                     desc: 'Professional Video Editor',      cat: 'Editors',      img: 'https://i.postimg.cc/XvFP1vtH/Picsart-26-05-21-13-51-32-987.png', rt: '4.8', sz: '120 MB' },
+            { id: 7,  name: 'SnapTube Pro',                   desc: 'Video & Music Downloader',       cat: 'Tools',        img: 'https://i.postimg.cc/cHhXPthd/Picsart-26-05-21-13-51-56-844.png', rt: '4.5', sz: '28 MB' },
+            { id: 8,  name: 'AI Photo Editor',                desc: 'AI-powered photo editing',       cat: 'AI',           img: 'https://i.postimg.cc/3wDkKfQq/aiphoto.jpg', rt: '4.2', sz: '45 MB' },
+            { id: 9,  name: 'Social Media Pro',               desc: 'Social Media Management',        cat: 'Social',       img: 'https://i.postimg.cc/bN1q2F5N/social.jpg', rt: '4.0', sz: '32 MB' },
+            { id: 10, name: 'VPN Secure',                     desc: 'Fast & Secure VPN',              cat: 'VPN',          img: 'https://i.postimg.cc/Y0K5Ts6D/vpn.jpg', rt: '4.4', sz: '18 MB' },
+            { id: 11, name: 'File Manager Pro',               desc: 'Advanced File Management',       cat: 'File Manager', img: 'https://i.postimg.cc/0Q8h9D0p/filemanager.jpg', rt: '4.3', sz: '22 MB' },
+            { id: 12, name: 'Browser Lite',                   desc: 'Fast & Lightweight Browser',     cat: 'Browsers',     img: 'https://i.postimg.cc/7hR6k8b9/browser.jpg', rt: '4.1', sz: '12 MB' },
+            { id: 13, name: 'Music Player Pro',               desc: 'Premium Music Player',           cat: 'Music & Audio', img: 'https://i.postimg.cc/9MZpv3x0/music.jpg', rt: '4.6', sz: '15 MB' },
+            { id: 14, name: 'Streaming Hub',                  desc: 'All-in-one streaming app',       cat: 'Streaming',    img: 'https://i.postimg.cc/GtF5JfQm/streaming.jpg', rt: '4.2', sz: '30 MB' },
+            { id: 15, name: 'Camera Pro',                     desc: 'Professional Camera App',        cat: 'Photography',  img: 'https://i.postimg.cc/8k9VgV7v/camera.jpg', rt: '4.4', sz: '50 MB' },
+            { id: 16, name: 'ElevenLabs: AI Voice Generator', desc: 'AI Voice Generator & TTS',       cat: 'AI', dev: 'Eleven Labs Inc', official: true, img: 'https://i.postimg.cc/0NQ6Tnf4/IMG-20260712-143301.png', rt: '4.6', sz: '39.6 MB' }
+        ];
+
+        const TREND_SEARCHES = [
+            { n: 'CapCut Pro',           id: 6  },
+            { n: 'Picsart Pro',          id: 5  },
+            { n: 'ElevenLabs AI Voice',  id: 16 },
+            { n: 'SnapTube Pro',         id: 7  },
+            { n: 'Farming Simulator 20', id: 0  },
+            { n: 'Video Editor',         id: 6  },
+            { n: 'Photo Editor',         id: 5  },
+            { n: 'Farming Games',        id: 0  },
+            { n: 'YouTube Downloader',   id: 7  }
+        ];
+
+
+        // =========================================
+        //  UTILITIES
+        // =========================================
+        function esc(s) {
+            if (s === null || s === undefined) return '';
+            return String(s).replace(/[&<>"]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                if (m === '"') return '&quot;';
+                return m;
+            });
+        }
+
+        function hi(text, q) {
+            text = String(text || '');
+            if (!q) return esc(text);
+            var i = text.toLowerCase().indexOf(q.toLowerCase());
+            if (i < 0) return esc(text);
+            return esc(text.slice(0, i)) +
+                   '<mark>' + esc(text.slice(i, i + q.length)) + '</mark>' +
+                   esc(text.slice(i + q.length));
+        }
+
+        const DLI = `
+            <svg style="width:14px; height:14px; stroke:currentColor; fill:none; stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round;" viewBox="0 0 24 24">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+        `;
+
+        function makeALI(a, q) {
+            var devLine = a.dev ? esc(a.dev) : 'Nyxora Store';
+            return `
+                <div class="ali" data-id="${a.id}" role="button" tabindex="0">
+                    <img decoding="async" loading="lazy" src="${esc(a.img)}" class="ali-logo"
+                         onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22><rect width=%2224%22 height=%2224%22 fill=%22%23e0e3ec%22/></svg>'"
+                         alt="${esc(a.name)}">
+                    <div class="ali-info">
+                        <div class="ali-name">${hi(a.name, q)}</div>
+                        <div class="ali-dev">${devLine} &middot; ${esc(a.cat)}</div>
+                        <div class="ali-meta">
+                            <span class="ali-rat">&#9733; ${esc(a.rt)}</span>
+                            <span class="ali-sz">${esc(a.sz)}</span>
+                            ${a.official ? '<span class="ali-sz" style="color:var(--blu); background:rgba(0,122,255,.1);">Official</span>' : ''}
+                        </div>
+                    </div>
+                    <button class="ali-btn" type="button" aria-label="Open ${esc(a.name)}">${DLI}</button>
+                </div>
+            `;
+        }
+
+
+        // =========================================
+        //  SEARCH HISTORY (sessionStorage)
+        // =========================================
+        var srchHist = [];
+        try { srchHist = JSON.parse(sessionStorage.getItem('nx_h') || '[]'); } catch (e) { srchHist = []; }
+        if (!Array.isArray(srchHist)) srchHist = [];
+
+        function persistHist() {
+            try { sessionStorage.setItem('nx_h', JSON.stringify(srchHist)); } catch (e) {}
+        }
+
+        function renderCHist() {
+            var el = document.getElementById('csrch-hist');
+            if (!el) return;
+
+            if (!srchHist.length) { el.innerHTML = ''; return; }
+
+            el.innerHTML = `
+                <div class="sec-hdr" style="padding-top:14px;">
+                    <div class="sec-title">Recent Searches</div>
+                    <div class="view-all" data-act="clear-all">Clear All</div>
+                </div>
+                <div style="display:flex; flex-wrap:wrap; gap:7px; padding:0 14px 6px;">
+                    ${srchHist.map(function(q) { return `
+                        <div class="hist-chip" data-q="${esc(q)}">
+                            <svg class="h-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            <span class="h-txt">${esc(q)}</span>
+                            <span class="h-x" data-act="rm" aria-label="Remove">&#215;</span>
+                        </div>
+                    `; }).join('')}
+                </div>
+            `;
+        }
+
+        function renderCTrend() {
+            var el = document.getElementById('csrch-trend');
+            if (!el) return;
+
+            var ids = {};
+            APPS.forEach(function(a) { ids[a.id] = true; });
+
+            el.innerHTML = TREND_SEARCHES
+                .filter(function(t) { return ids[t.id]; })
+                .map(function(t, i) { return `
+                    <div class="trend-srch-row" data-q="${esc(t.n)}" role="button" tabindex="0">
+                        <span class="tsr-rank">${i + 1}</span>
+                        <div class="tsr-ic">
+                            <svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                        </div>
+                        <span class="tsr-txt">${esc(t.n)}</span>
+                        <svg style="width:12px; height:12px; stroke:var(--txt2); fill:none; stroke-width:2.5; flex-shrink:0;" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+                    </div>
+                `; })
+                .join('');
+        }
+
+
+        // =========================================
+        //  SEARCH
+        // =========================================
+        var ciEl   = document.getElementById('ci');
+        var suggEl = document.getElementById('csrch-sugg');
+        var defEl  = document.getElementById('csrch-default');
+        var clrEl  = document.getElementById('ci-x');
+
+        function onCSrch(q) {
+            q = q || '';
+
+            // Show/hide custom clear button
+            clrEl.classList.toggle('visible', !!q);
+
+            if (!q.trim()) {
+                defEl.style.display  = 'block';
+                suggEl.style.display = 'none';
+                suggEl.innerHTML = '';
+                return;
+            }
+
+            defEl.style.display  = 'none';
+            suggEl.style.display = 'block';
+
+            var needle = q.trim().toLowerCase();
+
+            // 1. First match by name
+            var filtered = APPS.filter(function(a) {
+                return a.name.toLowerCase().includes(needle);
+            });
+
+            // 2. Sorting logic: apps starting with the search term come first
+            filtered.sort(function(a, b) {
+                var aName = a.name.toLowerCase();
+                var bName = b.name.toLowerCase();
+                var aStarts = aName.startsWith(needle);
+                var bStarts = bName.startsWith(needle);
+
+                if (aStarts && !bStarts) return -1;
+                if (!aStarts && bStarts) return 1;
+                return aName.localeCompare(bName);
+            });
+
+            suggEl.innerHTML = `
+                <div style="font-size:11px; font-weight:700; color:var(--txt2); padding:0 0 8px;">
+                    ${filtered.length} result${filtered.length === 1 ? '' : 's'} for &ldquo;${esc(q.trim())}&rdquo;
+                </div>
+                ${filtered.length ? filtered.map(function(a) { return makeALI(a, q.trim()); }).join('') : `
+                    <div class="empty-st">
+                        <div class="empty-ic">
+                            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        </div>
+                        <div style="font-size:15px; font-weight:900;">No Results</div>
+                        <div style="font-size:12px; color:var(--txt2); font-weight:600;">Try a different keyword</div>
+                    </div>
+                `}
+            `;
+        }
+
+        ciEl.addEventListener('input', function() { onCSrch(this.value); });
+
+        ciEl.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.keyCode === 13) {
+                e.preventDefault();
+                var v = this.value.trim();
+                if (v) saveCHist(v);
+                this.blur();
+            }
+        });
+
+        document.getElementById('ci-wrap').addEventListener('click', function(e) {
+            if (e.target.closest('.srch-in-x')) return;
+            ciEl.focus();
+        });
+
+        clrEl.addEventListener('click', function(e) {
+            e.stopPropagation();
+            var v = ciEl.value.trim();
+            if (v) saveCHist(v);
+            ciEl.value = '';
+            onCSrch('');
+            ciEl.focus();
+        });
+
+        suggEl.addEventListener('click', function(e) {
+            var card = e.target.closest('.ali');
+            if (!card) return;
+            var id = parseInt(card.dataset.id, 10);
+            var v = ciEl.value.trim();
+            if (v) saveCHist(v);
+            openDP(id);
+        });
+
+        suggEl.addEventListener('keydown', function(e) {
+            if (e.key !== 'Enter' && e.key !== ' ') return;
+            var card = e.target.closest('.ali');
+            if (!card) return;
+            e.preventDefault();
+            openDP(parseInt(card.dataset.id, 10));
+        });
+
+        document.getElementById('csrch-hist').addEventListener('click', function(e) {
+            if (e.target.closest('[data-act="clear-all"]')) { clearCHist(); return; }
+            var chip = e.target.closest('.hist-chip');
+            if (!chip) return;
+            var q = chip.dataset.q || '';
+            if (e.target.closest('[data-act="rm"]')) { removeCHist(q); return; }
+            tapCHist(q);
+        });
+
+        document.getElementById('csrch-trend').addEventListener('click', function(e) {
+            var row = e.target.closest('.trend-srch-row');
+            if (row) tapCHist(row.dataset.q || '');
+        });
+
+        document.getElementById('csrch-trend').addEventListener('keydown', function(e) {
+            if (e.key !== 'Enter' && e.key !== ' ') return;
+            var row = e.target.closest('.trend-srch-row');
+            if (!row) return;
+            e.preventDefault();
+            tapCHist(row.dataset.q || '');
+        });
+
+
+        // =========================================
+        //  HISTORY ACTIONS
+        // =========================================
+        function saveCHist(q) {
+            q = String(q || '').trim();
+            if (!q) return;
+            srchHist = srchHist.filter(function(x) { return x.toLowerCase() !== q.toLowerCase(); });
+            srchHist.unshift(q);
+            srchHist = srchHist.slice(0, 8);
+            persistHist();
+            renderCHist();
+        }
+
+        function clearCHist() {
+            srchHist = [];
+            persistHist();
+            renderCHist();
+        }
+
+        function removeCHist(q) {
+            srchHist = srchHist.filter(function(x) { return x !== q; });
+            persistHist();
+            renderCHist();
+        }
+
+        function tapCHist(q) {
+            ciEl.value = q;
+            onCSrch(q);
+            saveCHist(q);
+            ciEl.blur();
+        }
+
+
+        // =========================================
+        //  INIT
+        // =========================================
+        renderCHist();
+        renderCTrend();
+
+    </script>
+
+    <script>
+        /* =========================================================
+           SEARCH HEADER HIDE / SHOW ON SCROLL
+           Works on .page container scroll (not window)
+           ========================================================= */
+        (function initSearchHeaderScroll() {
+            var pageEl = document.getElementById('pg-search');
+            var hdrEl  = document.getElementById('searchHeader');
+            if (!pageEl || !hdrEl) return;
+
+            var hdrH     = hdrEl.offsetHeight || 60;
+            var lastY    = 0;
+            var offset   = 0;
+            var ticking  = false;
+            var THRESHOLD = 2;
+
+            function update() {
+                var curY = pageEl.scrollTop || 0;
+                var delta = curY - lastY;
+
+                if (Math.abs(delta) < THRESHOLD && curY > 0) {
+                    ticking = false;
+                    return;
+                }
+                lastY = curY;
+
+                if (curY <= 0) {
+                    offset = 0;
+                } else {
+                    offset += delta;
+                    if (offset < 0)         offset = 0;
+                    if (offset > hdrH)      offset = hdrH;
+                }
+
+                hdrEl.style.transform = 'translate3d(0,' + (-offset) + 'px,0)';
+                ticking = false;
+            }
+
+            pageEl.addEventListener('scroll', function() {
+                if (ticking) return;
+                ticking = true;
+                requestAnimationFrame(update);
+            }, { passive: true });
+
+            window.addEventListener('resize', function() {
+                hdrH = hdrEl.offsetHeight || 60;
+            }, { passive: true });
+        })();
+    </script>
+
+</body>
+</html>
