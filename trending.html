@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="only light">
+<meta name="theme-color" content="#ffffff">
+<title>MOD WORLD — Trending</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://i.postimg.cc">
+<link rel="preconnect" href="https://img.modworlds.org">
+<link rel="preconnect" href="https://picsum.photos">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+    color-scheme: only light;
+    --bg: #edf0f7;
+    --sur: #f2f5fc;
+    --sd: #c5c9d8;
+    --sl: #ffffff;
+    --txt: #1a1d2b;
+    --txt2: #7a7e92;
+    --red: #e8192c;
+    --ylw: #ff9500;
+    --neu-in: inset 4px 4px 10px var(--sd), inset -3px -3px 7px var(--sl);
+    --neu: 8px 8px 18px var(--sd), -5px -5px 12px var(--sl);
+    --neu-sm: 4px 4px 10px var(--sd), -3px -3px 7px var(--sl);
+    --card3d: 0 2px 0 rgba(255,255,255,0.95) inset,
+               0 10px 22px rgba(0,0,0,0.11),
+               0 4px 8px rgba(0,0,0,0.07),
+               0 1px 3px rgba(0,0,0,0.05);
+    --logo3d: 0 6px 10px rgba(0,0,0,0.18),
+               0 14px 30px rgba(0,0,0,0.15),
+               0 2px 0 rgba(255,255,255,0.9) inset;
+}
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+    color-interpolation: sRGB;
+}
+html, body {
+    height: 100%;
+    background: var(--bg);
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    color: var(--txt);
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+body.loading .page.active { visibility: hidden; }
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--sd); border-radius: 10px; }
+.ftr img { opacity: 0; transition: opacity 0.25s ease; }
+.ftr img.img-loaded { opacity: 1; }
+.page {
+    display: none;
+    height: 100vh;
+    height: 100dvh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    overscroll-behavior-y: contain;
+    will-change: scroll-position;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    padding-bottom: 0;
+}
+.page.active { display: block; }
+.hdr {
+    background: #ffffff;
+    padding: 12px 20px 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+    transform: translateY(0);
+    will-change: transform;
+}
+.hdr-nav { display: flex; align-items: center; gap: 10px; }
+.hbtn {
+    width: 36px;
+    height: 36px;
+    border-radius: 11px;
+    background: var(--bg);
+    box-shadow: var(--neu-in);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--txt2);
+    transition: all 0.15s ease;
+    flex-shrink: 0;
+}
+.hbtn:active { transform: scale(0.92); box-shadow: var(--neu); }
+.sec-title { font-size: 17px; font-weight: 900; letter-spacing: -0.2px; }
+.chip-row-static { padding: 4px 0 10px; }
+.chip-row-static .wrap {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 0 10px 4px;
+    -webkit-overflow-scrolling: touch;
+}
+.tag-chip {
+    background: var(--sur);
+    box-shadow: var(--neu-sm);
+    border: none;
+    border-radius: 18px;
+    padding: 7px 16px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--txt2);
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.15s;
+    flex-shrink: 0;
+}
+.tag-chip.act {
+    background: var(--red);
+    color: #fff;
+    box-shadow: 0 3px 0 #7a0011, 0 4px 12px rgba(232,25,44,0.3);
+}
+.tag-chip:active { transform: scale(0.95); }
+.ali {
+    background: linear-gradient(160deg, rgba(255,255,255,0.95), rgba(240,243,252,0.9));
+    border-top: 1.5px solid rgba(255,255,255,1);
+    border-left: 1.5px solid rgba(255,255,255,0.9);
+    border-right: 1.5px solid rgba(220,224,235,0.6);
+    border-bottom: 1.5px solid rgba(200,204,218,0.5);
+    box-shadow: var(--card3d);
+    border-radius: 14px;
+    padding: 11px 13px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    margin-bottom: 12px;
+    transform: translateZ(0);
+    contain: layout style paint;
+    opacity: 0;
+    transform: translateY(55px);
+    transition:
+        opacity 1.1s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 1.1s cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow 0.15s ease;
+    will-change: transform, opacity;
+}
+.ali.revealed { opacity: 1; transform: translateY(0); }
+.ali.revealed:active {
+    transform: translateY(3px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.06);
+}
+.ali-logo {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    object-fit: cover;
+    flex-shrink: 0;
+    border: 3px solid #fff;
+    box-shadow: var(--logo3d);
+    background: #e0e3ec;
+}
+.ali-info { flex: 1; min-width: 0; }
+.ali-name {
+    font-size: 13px;
+    font-weight: 800;
+    margin-bottom: 1px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.ali-dev { font-size: 10px; color: var(--txt2); font-weight: 600; margin-bottom: 4px; }
+.ali-meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.ali-rat { font-size: 10px; font-weight: 800; color: var(--ylw); }
+.ali-sz {
+    font-size: 9px;
+    font-weight: 700;
+    background: var(--bg);
+    padding: 2px 8px;
+    border-radius: 7px;
+    color: var(--txt2);
+}
+.ali-btn {
+    background: linear-gradient(145deg, #e8192c, #bb0019);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    box-shadow: 0 4px 0 #7a0011, 0 5px 12px rgba(232,25,44,0.3);
+    transition: all 0.12s;
+}
+.ali-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 #7a0011; }
+.empty-st {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 50px 20px;
+    text-align: center;
+    gap: 12px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.empty-st.revealed { opacity: 1; transform: translateY(0); }
+.empty-ic {
+    width: 72px;
+    height: 72px;
+    border-radius: 18px;
+    background: var(--sur);
+    box-shadow: var(--neu);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--txt2);
+}
+.bnav {
+    position: fixed;
+    bottom: -26px;
+    left: 0;
+    right: 0;
+    z-index: 500;
+    height: 100px;
+    background: #ffffff;
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -4px 30px rgba(0,0,0,0.20), 0 -8px 60px rgba(0,0,0,0.12);
+    display: flex;
+    align-items: flex-start;
+    padding: 10px 6px 0;
+}
+.bn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    padding: 0;
+    border: none;
+    background: transparent;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    min-width: 0;
+}
+.bn-ic {
+    width: 36px;
+    height: 36px;
+    border-radius: 11px;
+    background: var(--bg);
+    box-shadow: var(--neu-in);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+}
+.bn.active .bn-ic {
+    background: linear-gradient(145deg, #ff4040, #cc0000);
+    box-shadow: 0 3px 0 #900000, 0 4px 12px rgba(232,25,44,0.30), inset 0 1px 0 rgba(255,255,255,0.25);
+}
+.bn:active .bn-ic { transform: scale(0.90); }
+.bn-img { width: 19px; height: 19px; object-fit: contain; display: block; }
+.bn span { font-size: 9px; font-weight: 700; letter-spacing: 0.2px; color: var(--txt2); }
+.bn.active span { color: var(--red); font-weight: 800; }
+.ftr {
+    background: #ffffff;
+    border-radius: 0;
+    padding: 14px 20px 100px 20px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 -8px 20px rgba(0,0,0,0.10), 0 -16px 40px rgba(0,0,0,0.06), 0 -2px 6px rgba(0,0,0,0.05);
+}
+.ftr::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    z-index: 3;
+    background: linear-gradient(90deg,
+        #e8192c 0%, #ff5c8a 12%, #448aff 25%, #4dd0e1 37%,
+        #66bb6a 50%, #aed581 62%, #ffa726 75%, #ff7043 87%, #e8192c 100%);
+    background-size: 300% 100%;
+    animation: ftrRainbow 4s linear infinite;
+    will-change: background-position;
+}
+@keyframes ftrRainbow {
+    0% { background-position: 300% 50%; }
+    100% { background-position: 0% 50%; }
+}
+.ftr-top, .ftr-social-title, .ftr-socials, .ftr-cols, .ftr-bottom {
+    position: relative;
+    z-index: 1;
+}
+.ftr-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px dashed rgba(122,126,146,0.25);
+}
+.ftr-top > div { margin-left: 0; width: 100%; }
+.ftr-logo {
+    height: 36px;
+    width: auto;
+    max-width: 150px;
+    object-fit: contain;
+    display: block;
+    margin-top: -4px;
+    margin-left: -4px;
+}
+.ftr-tagline {
+    font-size: 11px;
+    color: var(--txt2);
+    font-weight: 500;
+    line-height: 1.7;
+    margin-top: 6px;
+    word-spacing: 1.6px;
+    letter-spacing: 0.15px;
+    max-width: 100%;
+}
+.ftr-social-title {
+    text-align: center;
+    font-size: 11.5px;
+    font-weight: 900;
+    color: var(--txt);
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    opacity: 0.85;
+}
+.ftr-socials {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    margin-bottom: 18px;
+    padding-bottom: 16px;
+    border-bottom: 1px dashed rgba(122,126,146,0.25);
+    width: 100%;
+}
+.ftr-soc {
+    width: 32px;
+    height: 32px;
+    flex: 0 0 auto;
+    border-radius: 9px;
+    background: var(--bg);
+    box-shadow: inset 4px 4px 9px var(--sd), inset -3px -3px 7px var(--sl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    padding: 5px;
+    overflow: hidden;
+    transform: translate3d(0,0,0) scale(1);
+    transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.ftr-soc:active {
+    transform: translate3d(0,0,0) scale(0.85);
+    transition: transform 0.06s ease-out;
+}
+.ftr-soc img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    pointer-events: none;
+}
+.ftr-cols {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px 10px;
+    margin-top: 20px;
+    margin-bottom: 15px;
+    width: 100%;
+    padding-left: 6px;
+}
+.ftr-col { min-width: 0; }
+.ftr-col:nth-child(1) { text-align: left; }
+.ftr-col:nth-child(2) { text-align: left; padding-left: 6px; }
+.ftr-col:nth-child(3) { text-align: left; padding-left: 22px; }
+.ftr-col-title {
+    font-size: 12.5px;
+    font-weight: 900;
+    color: var(--txt);
+    margin-bottom: 12px;
+    letter-spacing: -0.1px;
+}
+.ftr-link {
+    display: block;
+    font-size: 11.5px;
+    color: var(--txt2);
+    font-weight: 600;
+    text-decoration: none;
+    margin-bottom: 13px;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    padding: 0;
+    text-align: left;
+    font-family: inherit;
+    transition: color 0.15s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.ftr-link:hover,
+.ftr-link:active { color: var(--red); }
+.adv-link { margin-top: 10px !important; margin-bottom: 0 !important; }
+.ftr-bottom {
+    padding-top: 10px;
+    border-top: 1px dashed rgba(122,126,146,0.25);
+    text-align: center;
+}
+.ftr-copy {
+    font-size: 11px;
+    color: var(--txt2);
+    font-weight: 600;
+    letter-spacing: 0.1px;
+    line-height: 1.6;
+}
+.ftr-copy b { color: var(--red); font-weight: 900; }
+.ftr-made {
+    font-size: 10.5px;
+    color: var(--txt2);
+    font-weight: 700;
+    margin-top: 5px;
+    display: block;
+    line-height: 1.6;
+}
+@media (max-width: 380px) {
+    .hdr { padding: 10px 14px; }
+    .bn span { font-size: 8px; }
+    .ftr { padding: 12px 16px 100px 16px; }
+    .ftr-logo { height: 32px; max-width: 130px; }
+    .ftr-tagline { font-size: 10.5px; line-height: 1.65; word-spacing: 1.4px; }
+    .ftr-social-title { font-size: 10.5px; letter-spacing: 1.5px; margin-bottom: 9px; }
+    .ftr-socials { gap: 4px; margin-bottom: 16px; padding-bottom: 14px; }
+    .ftr-soc { width: 30px; height: 30px; border-radius: 8px; padding: 4px; }
+    .ftr-cols { gap: 14px 6px; margin-top: 16px; margin-bottom: 12px; padding-left: 2px; }
+    .ftr-col:nth-child(2) { padding-left: 2px; }
+    .ftr-col:nth-child(3) { padding-left: 14px; }
+    .ftr-col-title { font-size: 11px; margin-bottom: 10px; }
+    .ftr-link { font-size: 9.5px; margin-bottom: 11px; }
+    .ftr-copy { font-size: 10.5px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .ali, .empty-st {
+        transition: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+    .page { scroll-behavior: auto; }
+    .ftr::before { animation: none; }
+    body.loading .page.active { visibility: visible; }
+}
+</style>
+</head>
+<body class="loading">
+
+<div class="page active" id="pg-trending">
+<div class="hdr">
+<div class="hdr-nav">
+<button class="hbtn" onclick="goBackTrending()" style="margin-left:0;">
+<svg viewBox="0 0 24 24" style="width:17px;height:17px;stroke:var(--txt);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;"><polyline points="15 18 9 12 15 6"/></svg>
+</button>
+<div style="font-size:17px;font-weight:900;">Trending</div>
+</div>
+<button class="hbtn" onclick="toggleSort()" style="margin-left:0;width:auto;padding:0 12px;gap:6px;">
+<svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;">
+<line x1="4" y1="6" x2="20" y2="6"/>
+<line x1="4" y1="12" x2="14" y2="12"/>
+<line x1="4" y1="18" x2="9" y2="18"/>
+</svg>
+<span style="font-size:11px;font-weight:800;color:var(--txt);white-space:nowrap;" id="sortLabel">Popular</span>
+</button>
+</div>
+
+<div class="chip-row-static">
+<div class="wrap">
+<button class="tag-chip act" onclick="setTrendTab(this,0)">Popular</button>
+<button class="tag-chip" onclick="setTrendTab(this,1)">Latest</button>
+<button class="tag-chip" onclick="setTrendTab(this,2)">Top Rated</button>
+<button class="tag-chip" onclick="setTrendTab(this,3)">Editor's Choice</button>
+<button class="tag-chip" onclick="setTrendTab(this,4)">Most Downloaded</button>
+</div>
+</div>
+
+<div style="padding:6px 14px 40px;" id="trending-list"></div>
+
+<footer class="ftr">
+<div class="ftr-top">
+<div>
+<img src="https://img.modworlds.org/logo.png" class="ftr-logo" alt="MOD WORLDS" loading="lazy" onload="this.classList.add('img-loaded')" onerror="this.style.display='none'">
+<div class="ftr-tagline">MOD WORLDS is a global digital platform operated by a dedicated team of security researchers, Android developers, and content reviewers. We research, review, and organize publicly available applications and games with a strong focus on security, transparency, and user experience.</div>
+</div>
+</div>
+<div class="ftr-social-title">Join Our Community</div>
+<div class="ftr-socials">
+<a class="ftr-soc" href="https://discord.gg/x3eq3yqxhj" target="_blank" rel="noopener noreferrer" aria-label="Discord"><img src="https://img.modworlds.org/fr.png" alt="Discord" loading="lazy" onload="this.classList.add('img-loaded')"></a>
+<a class="ftr-soc" href="https://youtube.com/@mod_worlds40?si=2RWqctgTSuUkzraZ" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><img src="https://img.modworlds.org/hi.png" alt="YouTube" loading="lazy" onload="this.classList.add('img-loaded')"></a>
+<a class="ftr-soc" href="https://www.tiktok.com/@sebastian.giu?_r=1&_t=ZS-9A01uhBFWPk" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><img src="https://img.modworlds.org/hf.png" alt="TikTok" loading="lazy" onload="this.classList.add('img-loaded')"></a>
+<a class="ftr-soc" href="https://t.me/modwald_official" target="_blank" rel="noopener noreferrer" aria-label="Telegram"><img src="https://img.modworlds.org/li.png" alt="Telegram" loading="lazy" onload="this.classList.add('img-loaded')"></a>
+<a class="ftr-soc" href="https://www.facebook.com/share/1bovn8Sft3/" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><img src="https://img.modworlds.org/vn.png" alt="Facebook" loading="lazy" onload="this.classList.add('img-loaded')"></a>
+<a class="ftr-soc" href="https://www.linkedin.com/in/mod-worlds-8085313b9?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><img src="https://img.modworlds.org/gs.png" alt="LinkedIn" loading="lazy" onload="this.classList.add('img-loaded')"></a>
+<a class="ftr-soc" href="https://www.instagram.com/mod_worlds40?stkn=MXZ4cmJ6YW0xbGpmNg==" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><img src="https://img.modworlds.org/nx.png" alt="Instagram" loading="lazy" onload="this.classList.add('img-loaded')"></a>
+</div>
+<div class="ftr-cols">
+<div class="ftr-col">
+<div class="ftr-col-title">Explore</div>
+<a class="ftr-link" href="index.html">Home</a>
+<a class="ftr-link" href="games.html">Games</a>
+<a class="ftr-link" href="apps.html">Apps</a>
+<a class="ftr-link" href="trending.html">Trending</a>
+</div>
+<div class="ftr-col">
+<div class="ftr-col-title">Company</div>
+<a class="ftr-link" href="about.html">About Us</a>
+<a class="ftr-link" href="editorial.html">Editorial Policy</a>
+<a class="ftr-link" href="verification.html">Verification Process</a>
+<a class="ftr-link" href="contact.html">Contact Us</a>
+<a class="ftr-link adv-link" href="advertise.html">Advertise With Us</a>
+</div>
+<div class="ftr-col">
+<div class="ftr-col-title">Support</div>
+<a class="ftr-link" href="help.html">Help &amp; FAQ</a>
+<a class="ftr-link" href="privacy.html">Privacy Policy</a>
+<a class="ftr-link" href="terms.html">Terms of Service</a>
+<a class="ftr-link" href="dmca.html">DMCA Notice</a>
+</div>
+</div>
+<div class="ftr-bottom">
+<div class="ftr-copy">© <span class="ftrYear">2026</span> <b>MOD WORLDS</b> — Safe &amp; Verified Android Apps.</div>
+<div class="ftr-made">Built with for the global gaming community.</div>
+</div>
+</footer>
+</div>
+
+<div class="bnav">
+<button class="bn" onclick="window.location.href='index.html'" id="bn-home">
+<div class="bn-ic"><img decoding="async" src="https://img.modworlds.org/Home.png" class="bn-img" alt="Home"></div>
+<span>Home</span>
+</button>
+<button class="bn" onclick="window.location.href='games.html'" id="bn-games">
+<div class="bn-ic"><img decoding="async" src="https://img.modworlds.org/ve.png" class="bn-img" alt="Games"></div>
+<span>Games</span>
+</button>
+<button class="bn" onclick="window.location.href='apps.html'" id="bn-apps">
+<div class="bn-ic"><img decoding="async" src="https://img.modworlds.org/Apps.png" class="bn-img" alt="Apps"></div>
+<span>Apps</span>
+</button>
+<button class="bn active" onclick="window.location.href='trending.html'" id="bn-trending">
+<div class="bn-ic"><img decoding="async" src="https://img.modworlds.org/Trending.png" class="bn-img" alt="Trending"></div>
+<span>Trending</span>
+</button>
+<button class="bn" onclick="window.location.href='profile.html'" id="bn-profile">
+<div class="bn-ic"><img decoding="async" src="https://img.modworlds.org/Profile.png" class="bn-img" alt="Profile"></div>
+<span>Profile</span>
+</button>
+</div>
+
+<script>
+const APPS = [
+    { id: 0, name: 'Subway Surfers',   cat: 'Games',   img: 'https://picsum.photos/seed/subway/200/200', rt: '4.8', sz: '180 MB', cnt: '200M' },
+    { id: 1, name: 'CapCut Pro',       cat: 'Editors', img: 'https://i.postimg.cc/XvFP1vtH/Picsart-26-05-21-13-51-32-987.png', rt: '4.8', sz: '120 MB', cnt: '100M' },
+    { id: 2, name: 'PUBG Mobile',      cat: 'Games',   img: 'https://picsum.photos/seed/pubg/200/200', rt: '4.5', sz: '1.8 GB', cnt: '100M' },
+    { id: 3, name: 'ElevenLabs: AI Voice Generator', cat: 'AI', dev: 'Eleven Labs Inc', img: 'https://i.postimg.cc/0NQ6Tnf4/IMG-20260712-143301.png', rt: '4.6', sz: '39.6 MB', cnt: '250K' }
+];
+
+const EDITORS_CHOICE_IDS = [0, 1, 2, 3];
+
+const MODES = [
+    { id: 0, label: 'Popular' },
+    { id: 1, label: 'Latest' },
+    { id: 2, label: 'Top Rated' },
+    { id: 3, label: "Editor's Choice" },
+    { id: 4, label: 'Most Downloaded' }
+];
+
+let trendMode = 0;
+let trendingObserver = null;
+const CARD_STAGGER_MS = 90;
+
+(function initFromURL() {
+    try {
+        var params = new URLSearchParams(window.location.search);
+        var t = params.get('tab');
+        if (t) {
+            var found = MODES.findIndex(function(m) {
+                return m.label.toLowerCase() === t.toLowerCase();
+            });
+            if (found >= 0) trendMode = found;
+        }
+    } catch(e) {}
+})();
+
+function goBackTrending() {
+    window.location.href = 'apps.html';
+}
+
+window.addEventListener('popstate', function(e) {
+    if (document.getElementById('pg-trending').classList.contains('active')) {
+        window.location.href = 'apps.html';
+    }
+});
+
+function openDP(id) {}
+
+function esc(s) {
+    if (!s) return '';
+    return String(s).replace(/[&<>"]/g, m => {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return '&quot;';
+    });
+}
+
+const DLI = '<svg style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>';
+
+function makeALI(a) {
+    const devLine = a.dev ? esc(a.dev) : esc(a.cat);
+    return '<div class="ali" onclick="openDP(' + a.id + ')">' +
+        '<img decoding="async" loading="lazy" src="' + esc(a.img) + '" class="ali-logo" onerror="this.style.background=\'#e0e3ec\'" alt="' + esc(a.name) + '">' +
+        '<div class="ali-info">' +
+        '<div class="ali-name">' + esc(a.name) + '</div>' +
+        '<div class="ali-dev">' + devLine + '</div>' +
+        '<div class="ali-meta">' +
+        '<span class="ali-rat">&#9733; ' + esc(a.rt) + '</span>' +
+        '<span class="ali-sz">' + esc(a.sz) + '</span>' +
+        '</div></div>' +
+        '<button class="ali-btn" onclick="event.stopPropagation(); openDP(' + a.id + ')">' + DLI + '</button>' +
+        '</div>';
+}
+
+function downloadsToNumber(cnt) {
+    const s = String(cnt).trim().toUpperCase();
+    const num = parseFloat(s.replace(/[^0-9.]/g, '')) || 0;
+    if (s.includes('M')) return num * 1000000;
+    if (s.includes('K')) return num * 1000;
+    return num;
+}
+
+function getListForMode(mode) {
+    if (mode === 0) {
+        return APPS.slice().sort((a, b) => {
+            const sA = parseFloat(a.rt) * Math.log10(downloadsToNumber(a.cnt) + 1);
+            const sB = parseFloat(b.rt) * Math.log10(downloadsToNumber(b.cnt) + 1);
+            return sB - sA;
+        });
+    }
+    if (mode === 1) {
+        return APPS.slice().reverse();
+    }
+    if (mode === 2) {
+        return APPS.slice().sort((a, b) => parseFloat(b.rt) - parseFloat(a.rt));
+    }
+    if (mode === 3) {
+        return EDITORS_CHOICE_IDS.map(id => APPS.find(a => a.id === id)).filter(Boolean);
+    }
+    return APPS.slice().sort((a, b) => downloadsToNumber(b.cnt) - downloadsToNumber(a.cnt));
+}
+
+function renderTrending() {
+    const el = document.getElementById('trending-list');
+    if (!el) return;
+    const list = getListForMode(trendMode);
+    el.innerHTML = list.map(makeALI).join('');
+    setupCardReveal();
+}
+
+function setupCardReveal() {
+    if (trendingObserver) trendingObserver.disconnect();
+    const pageEl = document.getElementById('pg-trending');
+    const cards = document.querySelectorAll('#trending-list .ali, #trending-list .empty-st');
+    if (!cards.length) return;
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced) {
+        cards.forEach(c => c.classList.add('revealed'));
+        return;
+    }
+    trendingObserver = new IntersectionObserver(function(entries) {
+        const newlyVisible = [];
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                newlyVisible.push(entry.target);
+                trendingObserver.unobserve(entry.target);
+            }
+        });
+        newlyVisible.forEach(function(el, i) {
+            setTimeout(function() {
+                el.classList.add('revealed');
+            }, i * CARD_STAGGER_MS);
+        });
+    }, {
+        root: pageEl,
+        threshold: 0.01,
+        rootMargin: '0px 0px -20px 0px'
+    });
+    cards.forEach(el => trendingObserver.observe(el));
+}
+
+function updateSortLabel() {
+    const label = document.getElementById('sortLabel');
+    if (label) label.textContent = MODES[trendMode].label;
+}
+
+function scrollChipIntoView(mode) {
+    const chips = document.querySelectorAll('.chip-row-static .tag-chip');
+    const activeChip = chips[mode];
+    if (!activeChip) return;
+    const wrap = activeChip.closest('.wrap');
+    if (!wrap) return;
+    const target = activeChip.offsetLeft - (wrap.clientWidth / 2) + (activeChip.clientWidth / 2);
+    wrap.scrollTo({ left: target, behavior: 'smooth' });
+}
+
+function setTrendTab(el, mode) {
+    trendMode = mode;
+    document.querySelectorAll('.chip-row-static .tag-chip').forEach(b => b.classList.remove('act'));
+    el.classList.add('act');
+    updateSortLabel();
+    renderTrending();
+    document.getElementById('pg-trending').scrollTop = 0;
+}
+
+function toggleSort() {
+    trendMode = (trendMode + 1) % MODES.length;
+    const chips = document.querySelectorAll('.chip-row-static .tag-chip');
+    chips.forEach((b, i) => {
+        b.classList.toggle('act', i === trendMode);
+    });
+    scrollChipIntoView(trendMode);
+    updateSortLabel();
+    renderTrending();
+    document.getElementById('pg-trending').scrollTop = 0;
+}
+
+function initHideHeaderOnScroll() {
+    document.querySelectorAll('.page').forEach(function(pageEl) {
+        const hdrEl = pageEl.querySelector('.hdr');
+        if (!hdrEl) return;
+        const hdrHeight = hdrEl.offsetHeight || 60;
+        let lastY = 0;
+        let ticking = false;
+        pageEl.addEventListener('scroll', function() {
+            const curY = pageEl.scrollTop;
+            if (ticking) return;
+            ticking = true;
+            requestAnimationFrame(function() {
+                const delta = curY - lastY;
+                lastY = curY;
+                let offset = parseFloat(hdrEl.dataset.hideOffset || '0');
+                if (curY <= 0) {
+                    offset = 0;
+                } else {
+                    offset += delta;
+                    if (offset < 0) offset = 0;
+                    if (offset > hdrHeight) offset = hdrHeight;
+                }
+                hdrEl.dataset.hideOffset = offset;
+                hdrEl.style.transform = 'translateY(-' + offset + 'px)';
+                ticking = false;
+            });
+        }, { passive: true });
+    });
+}
+
+document.querySelectorAll('.ftrYear').forEach(function(el) {
+    el.textContent = new Date().getFullYear();
+});
+
+(function syncChipsToMode() {
+    var chips = document.querySelectorAll('.chip-row-static .tag-chip');
+    chips.forEach(function(b, i) {
+        b.classList.toggle('act', i === trendMode);
+    });
+    updateSortLabel();
+    setTimeout(function() { scrollChipIntoView(trendMode); }, 100);
+})();
+
+renderTrending();
+initHideHeaderOnScroll();
+
+requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+        document.body.classList.remove('loading');
+    });
+});
+</script>
+
+</body>
+</html>
