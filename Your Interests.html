@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="only light">
+<meta name="theme-color" content="#edf0f7">
+<title>MOD WORLD — Your Interests</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://img.modworlds.org">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+:root{
+    --bg   : #edf0f7;
+    --sur  : #f2f5fc;
+    --sd   : #c5c9d8;
+    --sl   : #ffffff;
+    --txt  : #1a1d2b;
+    --txt2 : #7a7e92;
+    --red  : #e8192c;
+    --grn  : #34c759;
+
+    --neu-in : inset 4px 4px 10px var(--sd), inset -3px -3px 7px var(--sl);
+    --neu-in-sm : inset 2.5px 2.5px 6px var(--sd), inset -2px -2px 4.5px var(--sl);
+    --neu    : 8px 8px 18px var(--sd), -5px -5px 12px var(--sl);
+    --neu-sm : 3px 3px 8px var(--sd), -2px -2px 6px var(--sl);
+
+    --ease-expo : cubic-bezier(0.19, 1, 0.22, 1);
+    --ease-soft : cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+*,*::before,*::after{
+    box-sizing:border-box;
+    margin:0; padding:0;
+    -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+    height:100%;
+    background:var(--bg);
+    font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;
+    color:var(--txt);
+    overflow:hidden;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+}
+
+img{ display:block; max-width:100%; }
+
+::-webkit-scrollbar{ width:4px; height:4px; }
+::-webkit-scrollbar-track{ background:var(--bg); }
+::-webkit-scrollbar-thumb{ background:var(--sd); border-radius:10px; }
+
+.page{
+    height:100vh;
+    height:100dvh;
+    overflow-y:auto;
+    overflow-x:hidden;
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior-y:none;
+    transform:translateZ(0);
+    padding-bottom:80px;
+    display:flex;
+    flex-direction:column;
+    scroll-behavior:smooth;
+}
+
+.hdr{
+    background:#ffffff;
+    padding:10px 16px 10px 0;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    position:sticky;
+    top:0;
+    z-index:100;
+    box-shadow:0 2px 10px rgba(0,0,0,0.08);
+    flex-shrink:0;
+    will-change:transform;
+    backface-visibility:hidden;
+    contain:layout paint;
+    animation:hdrSlideDown 0.6s var(--ease-expo) both;
+}
+@keyframes hdrSlideDown{
+    from{ transform:translate3d(0,-100%,0); opacity:0; }
+    to  { transform:translate3d(0,0,0);     opacity:1; }
+}
+.hdr-nav{ display:flex; align-items:center; gap:9px; }
+
+.hbtn{
+    width:34px; height:34px;
+    border-radius:10px;
+    background:var(--bg);
+    box-shadow:var(--neu-in);
+    border:none;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    color:var(--txt2);
+    flex-shrink:0;
+    margin-left:16px;
+    transition:transform .15s ease, box-shadow .15s ease;
+    touch-action:manipulation;
+}
+.hbtn:active{ transform:scale(0.92); box-shadow:var(--neu); }
+
+.hdr-title{ font-size:15px; font-weight:900; letter-spacing:-0.2px; }
+
+.hdr-count{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    padding:6px 12px;
+    background:var(--bg);
+    border-radius:100px;
+    box-shadow:var(--neu-in-sm);
+    font-size:10.5px;
+    font-weight:800;
+    color:var(--txt2);
+    letter-spacing:.2px;
+    transition:all .3s ease;
+    margin-right:16px;
+}
+.hdr-count b{
+    color:var(--red);
+    font-size:12px;
+    font-weight:900;
+    font-variant-numeric:tabular-nums;
+    transition:transform .28s cubic-bezier(0.34,1.56,0.64,1);
+    display:inline-block;
+    min-width:10px;
+    text-align:center;
+}
+.hdr-count.complete{
+    box-shadow:
+        inset 2.5px 2.5px 6px rgba(52,199,89,0.30),
+        inset -2px -2px 4.5px var(--sl);
+    color:#1fa846;
+}
+.hdr-count.complete b{ color:#1fa846; }
+
+@keyframes numPop{
+    0%{ transform:scale(1); }
+    50%{ transform:scale(1.4); }
+    100%{ transform:scale(1); }
+}
+.hdr-count b.pop{ animation:numPop .4s cubic-bezier(0.34,1.56,0.64,1) both; }
+
+.wrap{
+    width:100%;
+    max-width:520px;
+    margin:0 auto;
+    padding:14px 14px 0;
+    flex-shrink:0;
+}
+
+.sub-title{
+    text-align:center;
+    font-size:11px;
+    color:var(--txt2);
+    font-weight:600;
+    margin:0 4px 14px;
+    line-height:1.6;
+}
+
+.sec-label{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:10px 2px 9px;
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:1.4px;
+    text-transform:uppercase;
+    color:var(--txt);
+}
+.sec-label .rule{
+    flex:1 1 auto;
+    height:1px;
+    background:linear-gradient(90deg, rgba(122,126,146,.22), transparent);
+}
+
+.cat-grid{
+    display:grid;
+    grid-template-columns:repeat(5, 1fr);
+    gap:8px;
+    row-gap:10px;
+    margin-bottom:2px;
+}
+@media (min-width:520px){
+    .cat-grid{ grid-template-columns:repeat(6, 1fr); gap:9px; }
+}
+
+.cat-tile{
+    position:relative;
+    aspect-ratio:1 / 1.08;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:5px;
+    padding:8px 3px 6px;
+    border-radius:11px;
+    border:none;
+    cursor:pointer;
+    font-family:inherit;
+    background:var(--bg);
+    box-shadow:var(--neu-in-sm);
+    transition:
+        box-shadow .25s ease,
+        background .25s ease,
+        color .22s ease;
+    touch-action:manipulation;
+    will-change:transform;
+    overflow:visible;
+    transform-origin:center center;
+}
+.cat-tile:active{ transform:scale(0.94); transition:transform .1s ease; }
+
+.cat-tile.selected{
+    background:linear-gradient(145deg, #fff5f6, #ffe6e9);
+    box-shadow:
+        inset 2.5px 2.5px 6px rgba(232,25,44,0.30),
+        inset -2px -2px 4.5px #ffffff,
+        0 0 0 1.5px rgba(232,25,44,0.55),
+        0 3px 10px rgba(232,25,44,0.18);
+}
+
+.cat-icon{
+    width:30px;
+    height:30px;
+    object-fit:contain;
+    flex-shrink:0;
+    pointer-events:none;
+    transition:transform .35s cubic-bezier(0.34,1.56,0.64,1);
+    filter:brightness(0);
+}
+.cat-tile.selected .cat-icon{ transform:scale(1.12); }
+
+.cat-name{
+    display:block;
+    font-size:8.5px;
+    font-weight:800;
+    color:var(--txt);
+    line-height:1.05;
+    letter-spacing:-0.05px;
+    text-align:center;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    width:100%;
+    padding:0 1px;
+    transition:color .22s ease;
+}
+.cat-tile.selected .cat-name{ color:var(--red); }
+
+.cat-check{
+    position:absolute;
+    top:-4px;
+    right:-4px;
+    width:16px;
+    height:16px;
+    border-radius:50%;
+    background:linear-gradient(145deg,#ff4040,#cc0000);
+    box-shadow:0 2px 5px rgba(232,25,44,0.45);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transform:scale(0) rotate(-180deg);
+    opacity:0;
+    transition:
+        transform .5s cubic-bezier(0.34,1.56,0.64,1),
+        opacity .25s ease;
+    z-index:3;
+    pointer-events:none;
+}
+.cat-tile.selected .cat-check{
+    transform:scale(1) rotate(0deg);
+    opacity:1;
+}
+.cat-check svg{
+    width:9px; height:9px;
+    stroke:#fff;
+    fill:none;
+    stroke-width:3.6;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+}
+
+@keyframes tileEnter{
+    from{
+        opacity:0;
+        transform:translate3d(0,55px,0) scale(0.98);
+    }
+    to{
+        opacity:1;
+        transform:translate3d(0,0,0) scale(1);
+    }
+}
+.cat-tile.tile-enter{
+    animation:tileEnter 0.95s cubic-bezier(0.22, 1, 0.36, 1) both;
+    will-change:transform, opacity;
+}
+
+@keyframes tileBounceClean{
+    0%   { transform:scale(1); }
+    28%  { transform:scale(0.86); }
+    52%  { transform:scale(1.10); }
+    72%  { transform:scale(0.96); }
+    88%  { transform:scale(1.02); }
+    100% { transform:scale(1); }
+}
+.cat-tile.bounce{
+    animation:tileBounceClean 0.62s cubic-bezier(0.28, 0.84, 0.42, 1) both;
+    z-index:5;
+}
+
+@keyframes tileSqueezeClean{
+    0%   { transform:scale(1); }
+    45%  { transform:scale(0.92); }
+    100% { transform:scale(1); }
+}
+.cat-tile.squeeze{
+    animation:tileSqueezeClean 0.32s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+
+@keyframes tileShake{
+    0%,100%{ transform:translateX(0); }
+    20%    { transform:translateX(-4px); }
+    40%    { transform:translateX(4px); }
+    60%    { transform:translateX(-2px); }
+    80%    { transform:translateX(2px); }
+}
+.cat-tile.shake{ animation:tileShake .38s cubic-bezier(0.4,0,0.6,1) both; }
+
+.hint{
+    font-size:11px;
+    font-weight:700;
+    color:var(--txt2);
+    text-align:center;
+    margin-top:20px;
+    margin-bottom:14px;
+    line-height:1.5;
+    min-height:16px;
+    padding:0 6px;
+    transition:color .3s ease;
+}
+.hint.err{ color:var(--red); }
+.hint.ok { color:#1fa846; }
+
+.next-btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    width:100%;
+    max-width:520px;
+    margin:0 auto;
+    background:linear-gradient(145deg,#e8192c,#bb0019);
+    color:#fff;
+    border:none;
+    border-radius:14px;
+    padding:14px;
+    font-family:'Plus Jakarta Sans',sans-serif;
+    font-size:14px;
+    font-weight:900;
+    cursor:pointer;
+    text-align:center;
+    letter-spacing:.2px;
+    box-shadow:0 5px 0 #7a0011, 0 8px 18px rgba(232,25,44,0.28);
+    transition:
+        transform .22s cubic-bezier(0.22,1,0.36,1),
+        box-shadow .25s ease,
+        opacity .3s ease,
+        filter .3s ease;
+    touch-action:manipulation;
+    scroll-margin-bottom:120px;
+}
+.next-btn:active:not(:disabled){
+    transform:translateY(4px) scale(0.99);
+    box-shadow:0 1px 0 #7a0011, 0 3px 8px rgba(232,25,44,0.22);
+}
+.next-btn svg{ width:16px; height:16px; flex-shrink:0; }
+.next-btn:disabled{
+    opacity:0.4;
+    pointer-events:none;
+    filter:grayscale(0.5);
+}
+
+.page-footer{
+    text-align:center;
+    font-size:10.5px;
+    font-weight:600;
+    color:var(--txt2);
+    line-height:1.7;
+    padding:0 20px 14px;
+    margin-top:50px;
+    flex-shrink:0;
+}
+.page-footer .brand{ color:var(--red); font-weight:800; }
+.page-footer .made{
+    display:block;
+    margin-top:4px;
+    font-size:10.5px;
+    font-weight:700;
+    color:var(--txt2);
+}
+
+@keyframes slideUpFade{
+    from{
+        opacity:0;
+        transform:translate3d(0,55px,0) scale(0.98);
+    }
+    to{
+        opacity:1;
+        transform:translate3d(0,0,0) scale(1);
+    }
+}
+.enter-item{ opacity:0; }
+.enter-item.reveal,
+.enter-item.instant{
+    animation:slideUpFade 0.95s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.bnav{
+    position:fixed;
+    bottom:-26px; left:0; right:0;
+    z-index:500;
+    height:100px;
+    background:#ffffff;
+    border-radius:20px 20px 0 0;
+    box-shadow:
+        0 -4px 30px rgba(0,0,0,0.20),
+        0 -8px 60px rgba(0,0,0,0.12);
+    display:flex;
+    align-items:flex-start;
+    padding:10px 6px 0;
+    animation:bnavRise 0.7s var(--ease-expo) 0.08s both;
+}
+@keyframes bnavRise{
+    from{ transform:translate3d(0,100%,0); opacity:0; }
+    to  { transform:translate3d(0,0,0);     opacity:1; }
+}
+.bn{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:4px;
+    cursor:pointer;
+    padding:0;
+    border:none;
+    background:transparent;
+    font-family:'Plus Jakarta Sans',sans-serif;
+    min-width:0;
+    touch-action:manipulation;
+}
+.bn-ic{
+    width:36px; height:36px;
+    border-radius:11px;
+    background:var(--bg);
+    box-shadow:var(--neu-in);
+    display:flex; align-items:center; justify-content:center;
+    transition:box-shadow .2s ease, background .2s ease;
+}
+.bn.active .bn-ic{
+    background:linear-gradient(145deg,#ff4040,#cc0000);
+    box-shadow:
+        0 3px 0 #900000,
+        0 4px 12px rgba(232,25,44,0.30),
+        inset 0 1px 0 rgba(255,255,255,0.25);
+}
+.bn-img{ width:19px; height:19px; object-fit:contain; display:block; }
+.bn span{
+    font-size:9px;
+    font-weight:700;
+    letter-spacing:0.2px;
+    color:var(--txt2);
+}
+.bn.active span{ color:var(--red); font-weight:800; }
+
+@media (max-width:380px){
+    .wrap{ padding:12px 10px 0; }
+    .cat-grid{ gap:6px; row-gap:9px; }
+    .cat-tile{ padding:6px 2px 5px; border-radius:10px; gap:4px; }
+    .cat-icon{ width:26px; height:26px; }
+    .cat-name{ font-size:8px; }
+    .hdr{ padding:9px 12px 9px 0; }
+    .hdr-count{ margin-right:12px; padding:5px 10px; font-size:10px; }
+    .sec-label{ font-size:11px; padding:8px 2px 8px; }
+    .bn span{ font-size:8px; }
+    .page-footer{ font-size:10px; padding:0 16px 12px; margin-top:44px; }
+    .page-footer .made{ font-size:10px; }
+    .hint{ margin-top:16px; margin-bottom:12px; }
+}
+
+@media (prefers-reduced-motion:reduce){
+    .cat-tile.tile-enter,
+    .cat-tile.bounce,
+    .cat-tile.squeeze,
+    .cat-tile.shake,
+    .hdr,
+    .bnav,
+    .hdr-count b.pop,
+    .enter-item.reveal,
+    .enter-item.instant{ animation:none !important; }
+    .enter-item{ opacity:1 !important; }
+    .page{ scroll-behavior:auto; }
+}
+</style>
+</head>
+<body>
+
+<div class="page" id="pg-categories">
+
+    <div class="hdr" id="hdr">
+        <div class="hdr-nav">
+            <button class="hbtn" onclick="goBackToPrevious()" aria-label="Back">
+                <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:var(--txt);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;">
+                    <polyline points="15 18 9 12 15 6"/>
+                </svg>
+            </button>
+            <div class="hdr-title">Your Interests</div>
+        </div>
+
+        <div class="hdr-count" id="hdr-count">
+            <b id="count-num">0</b>
+            <span>/ 3</span>
+        </div>
+    </div>
+
+    <div class="wrap">
+
+        <div class="enter-item sub-title" data-delay="0.12">
+            Select at least <span style="color:#e8192c; font-weight:900;">3 categories</span> that you love most, and we will personalize your entire feed to bring you the best content tailored just for you!
+        </div>
+
+        <div class="enter-item sec-label" data-delay="0.25">
+            <span>Games</span>
+            <span class="rule"></span>
+        </div>
+        <div class="cat-grid" id="grid-games"></div>
+
+        <div class="enter-item sec-label" data-delay="0.30">
+            <span>Apps</span>
+            <span class="rule"></span>
+        </div>
+        <div class="cat-grid" id="grid-apps"></div>
+
+        <div class="hint enter-item" id="hint" data-delay="1.05">
+            Select <span style="color:#e8192c; font-weight:900;">3 categories</span> to continue
+        </div>
+
+        <button class="next-btn enter-item" id="next-btn" onclick="goNext()" disabled data-delay="1.18">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"/>
+                <polyline points="12 5 19 12 12 19"/>
+            </svg>
+            Next
+        </button>
+
+    </div>
+
+    <div class="page-footer enter-item" data-delay="1.30">
+        © 2026 <span class="brand">MOD WORLDS</span> &mdash; Safe &amp; Verified Android Apps.
+        <span class="made">Built with for the global gaming community.</span>
+    </div>
+
+</div>
+
+<div class="bnav">
+    <button class="bn" onclick="goBackToPrevious()" id="bn-home">
+        <div class="bn-ic"><img decoding="async" src="https://img.modworlds.org/Home.png" class="bn-img" alt="Home"></div>
+        <span>Home</span>
+    </button>
+    <button class="bn" onclick="goBackToPrevious()" id="bn-games">
+        <div class="bn-ic"><img decoding="async" src="https://img.modworlds.org/ve.png" class="bn-img" alt="Games"></div>
+        <span>Games</span>
+    </button>
+    <button class="bn" onclick="goBackToPrevious()" id="bn-apps">
+        <div class="bn-ic"><img decoding="async" src="https://img.modworlds.org/Apps.png" class="bn-img" alt="Apps"></div>
+        <span>Apps</span>
+    </button>
+    <button class="bn" onclick="goBackToPrevious()" id="bn-trending">
+        <div class="bn-ic"><img decoding="async" src="https://img.modworlds.org/Trending.png" class="bn-img" alt="Trending"></div>
+        <span>Trending</span>
+    </button>
+    <button class="bn active" onclick="goBackToPrevious()" id="bn-profile">
+        <div class="bn-ic"><img decoding="async" src="https://img.modworlds.org/Profile.png" class="bn-img" alt="Profile"></div>
+        <span>Profile</span>
+    </button>
+</div>
+
+
+<script>
+const MAX_SELECT = 3;
+
+const GAMES = [
+    { id:'action',       n:'Action',        i:'https://img.modworlds.org/Action.png' },
+    { id:'adventure',    n:'Adventure',     i:'https://img.modworlds.org/Adventure.png' },
+    { id:'racing',       n:'Racing',        i:'https://img.modworlds.org/Racing.png' },
+    { id:'sports',       n:'Sports',        i:'https://img.modworlds.org/Sports.png' },
+    { id:'puzzle',       n:'Puzzle',        i:'https://img.modworlds.org/Puzzle.png' },
+    { id:'arcade',       n:'Arcade',        i:'https://img.modworlds.org/Arcade.png' },
+    { id:'rpg',          n:'RPG',           i:'https://img.modworlds.org/RPG.png' },
+    { id:'strategy',     n:'Strategy',      i:'https://img.modworlds.org/Strategy.png' },
+    { id:'simulation',   n:'Simulation',    i:'https://img.modworlds.org/Simulation.png' },
+    { id:'casual',       n:'Casual',        i:'https://img.modworlds.org/Casual.png' },
+    { id:'openworld',    n:'Open World',    i:'https://img.modworlds.org/Open%20World.png' },
+    { id:'horror',       n:'Horror',        i:'https://img.modworlds.org/PNG/Horror.png' },
+    { id:'survival',     n:'Survival',      i:'https://img.modworlds.org/PNG/Survival.png' },
+    { id:'multiplayer',  n:'Multiplayer',   i:'https://img.modworlds.org/PNG/Multiplayer.png' },
+    { id:'offline',      n:'Offline',       i:'https://img.modworlds.org/PNG/Offline.png' },
+    { id:'battleroyale', n:'Battle Royale', i:'https://img.modworlds.org/PNG/BattleRoyale.png' },
+    { id:'fps',          n:'FPS',           i:'https://img.modworlds.org/PNG/FPS.png' },
+    { id:'fighting',     n:'Fighting',      i:'https://img.modworlds.org/PNG/Fighting.png' },
+    { id:'towerdefense', n:'Tower Defense', i:'https://img.modworlds.org/PNG/TowerDefense.png' },
+    { id:'kids',         n:'Kids',          i:'https://img.modworlds.org/PNG/Kids.png' }
+];
+
+const APPS = [
+    { id:'ai',              n:'AI',              i:'https://img.modworlds.org/c/AI.png' },
+    { id:'editors',         n:'Editors',         i:'https://img.modworlds.org/c/Editors.png' },
+    { id:'streaming',       n:'Streaming',       i:'https://img.modworlds.org/c/Streaming.png' },
+    { id:'social',          n:'Social',          i:'https://img.modworlds.org/c/Social.png' },
+    { id:'browsers',        n:'Browsers',        i:'https://img.modworlds.org/c/Browsers.png' },
+    { id:'vpn',             n:'VPN',             i:'https://img.modworlds.org/c/VPN.png' },
+    { id:'filemanager',     n:'File Manager',    i:'https://img.modworlds.org/c/FileManager.png' },
+    { id:'downloadmgrs',    n:'Download',        i:'https://img.modworlds.org/c/DownloadManagers.png' },
+    { id:'music',           n:'Music',           i:'https://img.modworlds.org/c/Music%26Audio.png' },
+    { id:'photography',     n:'Photography',     i:'https://img.modworlds.org/c/Photography.png' },
+    { id:'videoplayers',    n:'Video',           i:'https://img.modworlds.org/c/VideoPlayers.png' },
+    { id:'personalization', n:'Personalize',     i:'https://img.modworlds.org/c/Personalization.png' },
+    { id:'productivity',    n:'Productivity',    i:'https://img.modworlds.org/c/Productivity.png' },
+    { id:'education',       n:'Education',       i:'https://img.modworlds.org/c/Education.png' },
+    { id:'finance',         n:'Finance',         i:'https://img.modworlds.org/c/Finance.png' },
+    { id:'shopping',        n:'Shopping',        i:'https://img.modworlds.org/c/Shopping.png' },
+    { id:'health',          n:'Health',          i:'https://img.modworlds.org/c/Health%26Fitness.png' },
+    { id:'maps',            n:'Maps',            i:'https://img.modworlds.org/c/Maps%26Navigation.png' },
+    { id:'communication',   n:'Chat',            i:'https://img.modworlds.org/c/Communication.png' },
+    { id:'entertainment',   n:'Fun',             i:'https://img.modworlds.org/c/Entertainment.png' }
+];
+
+const selected = new Set();
+let hasAutoScrolled = false;
+
+function loadPending(){
+    try{ return JSON.parse(localStorage.getItem('nx_pending') || 'null'); }
+    catch(e){ return null; }
+}
+function savePending(data){
+    try{ localStorage.setItem('nx_pending', JSON.stringify(data)); }
+    catch(e){}
+}
+
+function makeTile(item, sectionId){
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'cat-tile tile-enter';
+    btn.dataset.id  = sectionId + '::' + item.id;
+    btn.dataset.sec = sectionId;
+    btn.setAttribute('aria-label', item.n);
+
+    btn.innerHTML =
+        '<span class="cat-check">' +
+            '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>' +
+        '</span>' +
+        '<img class="cat-icon" src="' + item.i + '" alt="" loading="lazy" decoding="async">' +
+        '<span class="cat-name">' + item.n + '</span>';
+
+    btn.addEventListener('animationend', function(ev){
+        if (ev.animationName === 'tileEnter'){
+            btn.classList.remove('tile-enter');
+            btn.style.animationDelay = '';
+        }
+    }, { once:true });
+
+    return btn;
+}
+
+function renderGrid(gridEl, list, sectionId, baseDelay, stagger){
+    const frag = document.createDocumentFragment();
+    list.forEach(function(item, i){
+        const tile = makeTile(item, sectionId);
+        tile.style.animationDelay = (baseDelay + i * stagger) + 'ms';
+        frag.appendChild(tile);
+    });
+    gridEl.appendChild(frag);
+}
+
+function buildAll(){
+    const gridGames = document.getElementById('grid-games');
+    const gridApps  = document.getElementById('grid-apps');
+
+    renderGrid(gridGames, GAMES, 'games', 350, 6);
+    renderGrid(gridApps,  APPS,  'apps',  380, 6);
+
+    document.querySelectorAll('.cat-tile').forEach(function(tile){
+        tile.addEventListener('click', function(){
+            toggleTile(tile, tile.dataset.id);
+        });
+    });
+}
+
+function toggleTile(tile, id){
+    if (tile.classList.contains('tile-enter')){
+        tile.classList.remove('tile-enter');
+        tile.style.animationDelay = '';
+    }
+
+    const wasSelected = selected.has(id);
+
+    if (!wasSelected && selected.size >= MAX_SELECT){
+        tile.classList.remove('shake');
+        void tile.offsetWidth;
+        tile.classList.add('shake');
+        setTimeout(function(){ tile.classList.remove('shake'); }, 460);
+
+        setHint('You can pick only <span style="color:#e8192c; font-weight:900;">3 categories</span>. Tap a selected one to remove.', 'err');
+        if (navigator.vibrate){ try{ navigator.vibrate([10,35,10]); }catch(e){} }
+        return;
+    }
+
+    if (wasSelected){
+        selected.delete(id);
+        tile.classList.remove('selected');
+
+        tile.classList.remove('squeeze');
+        void tile.offsetWidth;
+        tile.classList.add('squeeze');
+        setTimeout(function(){ tile.classList.remove('squeeze'); }, 340);
+    } else {
+        selected.add(id);
+        tile.classList.add('selected');
+
+        tile.classList.remove('bounce');
+        void tile.offsetWidth;
+        tile.classList.add('bounce');
+        setTimeout(function(){ tile.classList.remove('bounce'); }, 660);
+    }
+
+    if (navigator.vibrate){ try{ navigator.vibrate(wasSelected ? 8 : 14); }catch(e){} }
+
+    updateCounter();
+}
+
+function updateCounter(){
+    const numEl = document.getElementById('count-num');
+    const pill  = document.getElementById('hdr-count');
+
+    numEl.textContent = selected.size;
+    numEl.classList.remove('pop');
+    void numEl.offsetWidth;
+    numEl.classList.add('pop');
+
+    pill.classList.toggle('complete', selected.size === MAX_SELECT);
+
+    document.getElementById('next-btn').disabled = (selected.size !== MAX_SELECT);
+
+    if (selected.size === MAX_SELECT && !hasAutoScrolled){
+        hasAutoScrolled = true;
+
+        setTimeout(function(){
+            const nextBtn = document.getElementById('next-btn');
+            const pageEl  = document.getElementById('pg-categories');
+
+            if (!nextBtn || !pageEl) return;
+
+            const btnRect  = nextBtn.getBoundingClientRect();
+            const pageRect = pageEl.getBoundingClientRect();
+
+            const offsetFromTop = (btnRect.top - pageRect.top) + pageEl.scrollTop;
+            const viewportH     = pageEl.clientHeight;
+            const btnHeight     = btnRect.height;
+            const bottomPadding = 140;
+
+            const targetScroll = offsetFromTop - viewportH + btnHeight + bottomPadding;
+
+            pageEl.scrollTo({
+                top: Math.max(0, targetScroll),
+                behavior: 'smooth'
+            });
+        }, 260);
+    }
+
+    if (selected.size < MAX_SELECT){
+        hasAutoScrolled = false;
+    }
+
+    if (selected.size === MAX_SELECT){
+        setHint('Perfect! Tap Next to continue.', 'ok');
+    } else if (selected.size === 0){
+        setHint('Select <span style="color:#e8192c; font-weight:900;">3 categories</span> to continue', '');
+    } else {
+        setHint((MAX_SELECT - selected.size) + ' more to go', '');
+    }
+}
+
+function setHint(msg, type){
+    const el = document.getElementById('hint');
+    el.innerHTML = msg || '';
+    el.classList.remove('err','ok');
+    if (type) el.classList.add(type);
+}
+
+function goNext(){
+    if (selected.size !== MAX_SELECT) return;
+
+    const games = [];
+    const apps  = [];
+
+    selected.forEach(function(key){
+        const parts = key.split('::');
+        if (parts[0] === 'games') games.push(parts[1]);
+        else                      apps.push(parts[1]);
+    });
+
+    const payload = {
+        games: games,
+        apps : apps,
+        all  : Array.from(selected),
+        at   : Date.now()
+    };
+
+    const pending = loadPending();
+    if (pending){
+        pending.categories = payload.all;
+        pending.games      = games;
+        pending.apps       = apps;
+        savePending(pending);
+    }
+
+    try{ localStorage.setItem('nx_categories', JSON.stringify(payload)); }catch(e){}
+
+    setHint('Great choices! Saving...', 'ok');
+
+    setTimeout(function(){
+        window.location.href = 'index.html';
+    }, 400);
+}
+
+function goBackToPrevious(){
+    if (history.length > 1) history.back();
+    else window.location.href = 'index.html';
+}
+
+(function initHeaderScroll(){
+    const pageEl = document.getElementById('pg-categories');
+    const hdrEl  = document.getElementById('hdr');
+    if (!hdrEl) return;
+
+    let hdrHeight = hdrEl.offsetHeight || 55;
+    let lastY = 0;
+    let offset = 0;
+    let ticking = false;
+
+    window.addEventListener('resize', function(){
+        hdrHeight = hdrEl.offsetHeight || 55;
+    }, { passive:true });
+
+    pageEl.addEventListener('scroll', function(){
+        if (ticking) return;
+        ticking = true;
+
+        requestAnimationFrame(function(){
+            const curY  = pageEl.scrollTop;
+            const delta = curY - lastY;
+            lastY = curY;
+
+            if (curY <= 0){
+                offset = 0;
+            } else {
+                offset += delta;
+                if (offset < 0) offset = 0;
+                if (offset > hdrHeight) offset = hdrHeight;
+            }
+
+            hdrEl.style.transform = 'translate3d(0,' + (-offset) + 'px,0)';
+            ticking = false;
+        });
+    }, { passive:true });
+})();
+
+(function initScrollReveal(){
+    const pageEl = document.getElementById('pg-categories');
+    const items  = pageEl.querySelectorAll('.enter-item');
+
+    items.forEach(function(item){
+        item.dataset.firstDelay = parseFloat(item.dataset.delay || '0');
+    });
+
+    function isInViewport(item){
+        const rect = item.getBoundingClientRect();
+        const pageRect = pageEl.getBoundingClientRect();
+        const top = rect.top - pageRect.top;
+        return top < (pageEl.clientHeight - 40);
+    }
+
+    function revealInitial(){
+        const vh = pageEl.clientHeight;
+        items.forEach(function(item){
+            const rect = item.getBoundingClientRect();
+            const pageRect = pageEl.getBoundingClientRect();
+            const top = rect.top - pageRect.top;
+            if (top < vh){
+                item.style.animationDelay = (item.dataset.firstDelay || '0') + 's';
+                item.classList.add('instant');
+            }
+        });
+    }
+
+    function revealOnScroll(){
+        items.forEach(function(item){
+            if (item.classList.contains('reveal') || item.classList.contains('instant')) return;
+            if (isInViewport(item)){
+                item.style.animationDelay = '0s';
+                item.classList.add('reveal');
+            }
+        });
+    }
+
+    revealInitial();
+
+    let ticking = false;
+    pageEl.addEventListener('scroll', function(){
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(function(){
+            revealOnScroll();
+            ticking = false;
+        });
+    }, { passive:true });
+})();
+
+buildAll();
+updateCounter();
+</script>
+
+</body>
+</html>
