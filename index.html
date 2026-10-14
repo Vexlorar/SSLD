@@ -145,6 +145,14 @@ body { top: 0 !important; }
 .lang:hover, .lang.on { background: var(--accent-soft); border-color: var(--accent); }
 .lang.reset { grid-column: 1 / -1; border-color: var(--accent); }
 .empty { grid-column: 1 / -1; color: var(--muted); }
+
+/* hide Google Translate popups, banner and text highlight */
+#goog-gt-tt, .goog-tooltip, .goog-tooltip:hover, .goog-te-balloon-frame,
+.VIpgJd-ZVi9od-aZ2wEe-wOHMyf, .VIpgJd-ZVi9od-ORHb-OEVmcd, .VIpgJd-yAWNEb-L7lbkb {
+  display: none !important; visibility: hidden !important; opacity: 0 !important; pointer-events: none !important;
+}
+.goog-text-highlight { background: none !important; box-shadow: none !important; }
+font { background: none !important; box-shadow: none !important; }
 </style>
 </head>
 <body>
@@ -389,4 +397,4 @@ document.getElementById('menubtn').addEventListener('click', function () {
 </script>
 <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
-</html>
+  </html>
