@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>অক্ষরের ঘর</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600&family=Noto+Serif+Bengali:wght@400;500;700&family=Tiro+Bangla:ital@0;1&display=swap">
+<style>
+/* Layout: one reading column, wide hero type, letter grids as the only "images". */
+:root {
+  --bg: #f2f5f2;
+  --fg: #16221d;
+  --muted: #55655d;
+  --rule: #cfd9d2;
+  --accent: #0d6a52;
+  --accent-soft: #dcebe4;
+  --mark: #b83a2e;
+  --display: "Tiro Bangla", "Noto Serif Bengali", serif;
+  --body: "Noto Serif Bengali", "Tiro Bangla", serif;
+  --ui: "Hind Siliguri", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1613;
+    --fg: #e5ede8;
+    --muted: #9fb0a7;
+    --rule: #26362f;
+    --accent: #5fcfa8;
+    --accent-soft: #15271f;
+    --mark: #ee8a7e;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1613;
+  --fg: #e5ede8;
+  --muted: #9fb0a7;
+  --rule: #26362f;
+  --accent: #5fcfa8;
+  --accent-soft: #15271f;
+  --mark: #ee8a7e;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--body);
+  font-size: 18px;
+  line-height: 1.95;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0;
+  overflow-x: hidden;
+}
+.wrap { max-width: 40rem; margin: 0 auto; min-width: 0; }
+
+/* hero */
+.hero { position: relative; padding-block: 3.5rem 2.5rem; border-bottom: 1px solid var(--rule); }
+.ghost {
+  position: absolute; right: -0.08em; top: -0.1em;
+  font-family: var(--display); font-size: clamp(14rem, 62vw, 26rem); line-height: 1;
+  color: var(--accent); opacity: 0.09; pointer-events: none; user-select: none;
+}
+.kicker {
+  font-family: var(--ui); font-size: 0.85rem; letter-spacing: 0.08em; color: var(--accent);
+  font-weight: 600; margin: 0 0 1rem; position: relative;
+}
+h1 {
+  font-family: var(--display); font-weight: 400; font-size: clamp(3.4rem, 15vw, 6.6rem);
+  line-height: 1.15; margin: 0 0 1.5rem; text-wrap: balance; position: relative;
+}
+.lede { font-size: 1.2rem; line-height: 1.9; color: var(--fg); margin: 0 0 2rem; position: relative; }
+.toc { position: relative; font-family: var(--ui); margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 0.5rem 0.6rem; }
+.toc a {
+  display: inline-block; padding: 0.15rem 0.8rem; border: 1px solid var(--rule); border-radius: 99px;
+  color: var(--fg); text-decoration: none; font-size: 0.95rem; line-height: 1.7;
+}
+.toc a:hover { background: var(--accent-soft); border-color: var(--accent); }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* sections */
+section { padding-block: 3rem 0.5rem; scroll-margin-top: 1rem; }
+.num { font-family: var(--ui); font-size: 0.9rem; color: var(--mark); font-weight: 600; letter-spacing: 0.06em; margin: 0 0 0.4rem; }
+h2 { font-family: var(--display); font-weight: 400; font-size: clamp(2rem, 8vw, 2.9rem); line-height: 1.3; margin: 0 0 1.2rem; text-wrap: balance; }
+p { margin: 0 0 1.4rem; }
+.big {
+  font-family: var(--display); font-size: clamp(1.5rem, 5.6vw, 2rem); line-height: 1.6;
+  color: var(--accent); margin: 2rem 0; text-wrap: balance;
+}
+.small { font-family: var(--ui); font-size: 0.95rem; color: var(--muted); line-height: 1.8; }
+em { font-style: normal; color: var(--accent); font-weight: 500; }
+
+/* letter grids */
+.grp { margin: 1.6rem 0; }
+.grp h3 { font-family: var(--ui); font-weight: 600; font-size: 0.9rem; letter-spacing: 0.06em; color: var(--muted); margin: 0 0 0.3rem; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(3.6rem, 1fr)); border-top: 1px solid var(--rule); border-left: 1px solid var(--rule); }
+.grid span {
+  font-family: var(--display); font-size: 2.3rem; line-height: 1; text-align: center;
+  padding: 0.9rem 0 0.8rem; border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+}
+.grid span:hover { background: var(--accent-soft); color: var(--accent); }
+.rows { margin: 1.5rem 0; padding: 0; list-style: none; border-top: 1px solid var(--rule); }
+.rows li { display: grid; grid-template-columns: 5.5rem 1fr; gap: 0 1rem; padding: 0.7rem 0; border-bottom: 1px solid var(--rule); align-items: baseline; }
+.rows b { font-family: var(--display); font-weight: 400; font-size: 1.7rem; color: var(--accent); }
+.rows span { min-width: 0; }
+
+footer { margin-top: 4rem; padding-block: 2.5rem 3.5rem; border-top: 1px solid var(--rule); text-align: left; }
+footer .end { font-family: var(--display); font-size: 2.4rem; line-height: 1.3; margin: 0 0 0.6rem; }
+
+/* top menu + Google Translate */
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50; background: var(--bg); border-bottom: 1px solid var(--rule); }
+.barin { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 0.5rem; }
+.brand { font-family: var(--display); font-size: 1.4rem; color: var(--fg); text-decoration: none; }
+.menubtn { font-family: var(--ui); font-size: 1rem; background: var(--accent-soft); color: var(--fg); border: 1px solid var(--accent); border-radius: 99px; padding: 0.25rem 1rem; cursor: pointer; }
+.panel { font-family: var(--ui); padding-block: 0.5rem 1rem; border-top: 1px solid var(--rule); }
+.panel h4 { margin: 0.8rem 0 0.4rem; font-size: 0.9rem; letter-spacing: 0.06em; color: var(--muted); font-weight: 600; }
+.panel nav a { display: block; padding: 0.35rem 0; color: var(--fg); text-decoration: none; border-bottom: 1px solid var(--rule); }
+.goog-te-gadget { font-family: var(--ui) !important; color: var(--muted) !important; font-size: 0.85rem !important; }
+.goog-te-gadget .goog-te-combo { width: 100%; font-size: 1rem; padding: 0.5rem; border-radius: 8px; border: 1px solid var(--rule); background: var(--bg); color: var(--fg); margin: 0.3rem 0 0; }
+.goog-te-gadget > span { display: none; }
+.goog-te-banner-frame, iframe.skiptranslate { display: none !important; }
+body { top: 0 !important; }
+
+#google_translate_element { position: absolute; left: -9999px; top: 0; width: 1px; height: 1px; overflow: hidden; }
+.langbtn { width: 100%; display: flex; justify-content: space-between; align-items: center; font-family: var(--ui); font-size: 1rem; color: var(--fg); background: var(--accent-soft); border: 1px solid var(--accent); border-radius: 10px; padding: 0.6rem 0.9rem; cursor: pointer; }
+.sheet { position: fixed; inset: 0; z-index: 100; background: var(--bg); color: var(--fg); display: flex; flex-direction: column; font-family: var(--ui);
+  padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.sheet[hidden] { display: none; }
+.sheethead { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 0.8rem; }
+.sheethead h3 { margin: 0; font-family: var(--display); font-weight: 400; font-size: 1.6rem; }
+.xbtn { font: inherit; background: none; color: var(--fg); border: 1px solid var(--rule); border-radius: 99px; padding: 0.2rem 0.9rem; cursor: pointer; }
+.sheet input { width: 100%; font: inherit; font-size: 1rem; padding: 0.7rem 0.9rem; border-radius: 10px; border: 1px solid var(--rule); background: var(--bg); color: var(--fg); }
+.langlist { flex: 1; min-height: 0; overflow-y: auto; margin-top: 0.7rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr)); gap: 0.45rem; align-content: start; padding-bottom: 1rem; }
+.lang { text-align: left; display: flex; flex-direction: column; padding: 0.55rem 0.85rem; border: 1px solid var(--rule); border-radius: 10px; background: var(--bg); color: var(--fg); cursor: pointer; font: inherit; min-width: 0; }
+.lang .nat { font-size: 1.05rem; font-weight: 600; line-height: 1.5; }
+.lang .en { font-size: 0.85rem; color: var(--muted); line-height: 1.4; }
+.lang:hover, .lang.on { background: var(--accent-soft); border-color: var(--accent); }
+.lang.reset { grid-column: 1 / -1; border-color: var(--accent); }
+.empty { grid-column: 1 / -1; color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="wrap">
+    <div class="barin">
+      <a class="brand" href="#top">অক্ষরের ঘর</a>
+      <button class="menubtn" id="menubtn" type="button" aria-expanded="false" aria-controls="panel">☰ মেনু</button>
+    </div>
+    <div class="panel" id="panel" hidden>
+      <h4>অনুবাদ</h4>
+      <button class="langbtn" id="langbtn" type="button"><span>🌐 ভাষা বদলান</span><span aria-hidden="true">›</span></button>
+      <div id="google_translate_element"></div>
+      <h4>পাতার অংশ</h4>
+      <nav>
+        <a href="#shuru">শুরুর কথা</a>
+        <a href="#bongsho">লিপির বংশ</a>
+        <a href="#shor">স্বরবর্ণ</a>
+        <a href="#benjon">ব্যঞ্জনবর্ণ</a>
+        <a href="#kar">কার ও যুক্তবর্ণ</a>
+        <a href="#chapa">ছাপাখানা</a>
+        <a href="#ekush">একুশ</a>
+        <a href="#onko">সংখ্যা</a>
+      </nav>
+    </div>
+  </div>
+</div>
+<div class="sheet notranslate" translate="no" id="langsheet" role="dialog" aria-modal="true" aria-label="ভাষা বাছুন" hidden>
+  <div class="sheethead"><h3>ভাষা বাছুন</h3><button class="xbtn" id="langclose" type="button">বন্ধ</button></div>
+  <input id="langq" type="search" placeholder="ভাষা খুঁজুন..." autocomplete="off">
+  <div class="langlist" id="langlist"><p class="empty">ভাষার তালিকা লোড হচ্ছে...</p></div>
+</div>
+<span id="top"></span>
+<header class="hero">
+  <div class="wrap">
+    <div class="ghost" aria-hidden="true">অ</div>
+    <p class="kicker">একটি লেখা-ভরা পাতা</p>
+    <h1>অক্ষরের ঘর</h1>
+    <p class="lede">এই পাতায় কোনো ছবি নেই। ছবির কাজটা করছে অক্ষর নিজেই। বাংলা বর্ণমালার গড়ন, তার বংশপরিচয়, তার ছাপা হওয়ার ইতিহাস আর তার জন্য দেওয়া প্রাণের কথা এখানে একটানা পড়া যায়।</p>
+    <ul class="toc">
+      <li><a href="#shuru">শুরুর কথা</a></li>
+      <li><a href="#bongsho">লিপির বংশ</a></li>
+      <li><a href="#shor">স্বরবর্ণ</a></li>
+      <li><a href="#benjon">ব্যঞ্জনবর্ণ</a></li>
+      <li><a href="#kar">কার ও যুক্তবর্ণ</a></li>
+      <li><a href="#chapa">ছাপাখানা</a></li>
+      <li><a href="#ekush">একুশ</a></li>
+      <li><a href="#onko">সংখ্যা</a></li>
+    </ul>
+  </div>
+</header>
+
+<main class="wrap">
+
+<section id="shuru">
+  <p class="num">অধ্যায় ১</p>
+  <h2>শুরুর কথা</h2>
+  <p>একটা বাড়িতে যেমন দরজা, জানালা, ছাদ আর উঠোন থাকে, ভাষার বাড়িতে তেমনই থাকে অক্ষর। আমরা যখন কথা বলি, তখন শব্দ হাওয়ায় মিলিয়ে যায়। যখন লিখি, তখন সেই শব্দ একটা ঠিকানা পায়। কাগজে, দেয়ালে, ফোনের পর্দায় সে বসে থাকে, যতক্ষণ কেউ পড়তে না আসে।</p>
+  <p>বাংলা অক্ষরের একটা আলাদা চেহারা আছে। মাথার ওপর টানা একটা রেখা, যাকে আমরা মাত্রা বলি, প্রায় প্রতিটা অক্ষরকে একটা সুতোয় গেঁথে রাখে। একটা শব্দ লিখলে মনে হয় ছোট্ট একটা কাপড়ের দড়িতে কয়েকটা জামা ঝুলছে। এই মাত্রাই বাংলা লেখাকে এক নজরে চিনিয়ে দেয়।</p>
+  <p class="big">অক্ষর মানে যার ক্ষয় নেই। নামটাই বলে দিচ্ছে, লেখা টিকে থাকার জন্য।</p>
+  <p>এই পাতাটা তাই পুরোটাই লেখা দিয়ে সাজানো। ওপর থেকে নিচে পড়ে গেলে একটা ছোট্ট ভ্রমণ হবে। শুরুতে লিপির জন্মকথা, মাঝখানে বর্ণমালার সব ঘর, শেষে সেই দিনের কথা যেদিন এই অক্ষরগুলোর জন্য মানুষ রাস্তায় নেমেছিল।</p>
+</section>
+
+<section id="bongsho">
+  <p class="num">অধ্যায় ২</p>
+  <h2>লিপির বংশপরিচয়</h2>
+  <p>বাংলা লিপির শেকড় গিয়ে ঠেকেছে ব্রাহ্মী লিপিতে। ব্রাহ্মী ছিল প্রাচীন ভারতের এক বড় পরিবারের মূল লিপি, যার থেকে নানা অঞ্চলে নানা ধরনের লিপি ডালপালা মেলেছে। পূর্ব ভারতের দিকে যে ডালটা বেড়ে উঠল, তার সঙ্গে নাগরী লিপির আত্মীয়তা আছে। সেখান থেকে ধাপে ধাপে বদলাতে বদলাতে তৈরি হয়েছে আজকের বাংলা, অসমিয়া আর মিথিলাক্ষরের মতো লিপি।</p>
+  <p>এই বদলটা একদিনে হয়নি। শত শত বছর ধরে পুঁথির লিপিকররা হাতে লিখেছেন। কেউ একটা বাঁক একটু বেশি টেনেছেন, কেউ একটা মাত্রা একটু সংক্ষিপ্ত করেছেন। সেই ছোট ছোট অভ্যাস জমে জমে অক্ষরের চেহারাটা ধীরে ধীরে আজকের রূপে এসেছে। প্রাচীন পুঁথির পাতা দেখলে আজকের চেনা অক্ষরের আদল পাওয়া যায়, তবে প্রতিটা একটু অচেনা, একটু বেশি কাছাকাছি, একটু বেশি হাতে-লেখা।</p>
+  <p>এ থেকে একটা কথা বোঝা যায়। লিপি কোনো একজন মানুষের তৈরি জিনিস নয়। সে অসংখ্য মানুষের হাতের অভ্যাসের যোগফল। আজ আমরা যে অক্ষরে লিখছি, তার প্রতিটা বাঁকে কারও না কারও কলমের ছাপ রয়ে গেছে।</p>
+</section>
+
+<section id="shor">
+  <p class="num">অধ্যায় ৩</p>
+  <h2>স্বরবর্ণ, যারা একা উচ্চারিত হয়</h2>
+  <p>বর্ণমালার প্রথম ঘরে থাকে স্বরবর্ণ। এরা এমন ধ্বনি, যাদের উচ্চারণ করতে অন্য কোনো বর্ণের সাহায্য লাগে না। প্রচলিত হিসাবে বাংলায় স্বরবর্ণ এগারোটি।</p>
+  <div class="grp">
+    <h3>স্বরবর্ণ, মোট ১১টি</h3>
+    <div class="grid" role="list">
+      <span role="listitem">অ</span><span role="listitem">আ</span><span role="listitem">ই</span><span role="listitem">ঈ</span><span role="listitem">উ</span><span role="listitem">ঊ</span><span role="listitem">ঋ</span><span role="listitem">এ</span><span role="listitem">ঐ</span><span role="listitem">ও</span><span role="listitem">ঔ</span>
+    </div>
+  </div>
+  <p>এদের মধ্যে কয়েকটার জোড়া আছে, যেমন ই আর ঈ, উ আর ঊ। লেখায় দুটোর চেহারা আলাদা, কিন্তু আজকের উচ্চারণে অনেক সময় তফাত ধরা পড়ে না। অক্ষরের এই বাড়তি ভাগটা মনে করিয়ে দেয়, লিপি অনেক পুরোনো, আর সে তার আগের কালের উচ্চারণের স্মৃতি এখনো বয়ে বেড়াচ্ছে।</p>
+  <p>স্বরবর্ণের একটা বিশেষ গুণ আছে। যখন এরা কোনো ব্যঞ্জনের সঙ্গে বসে, তখন নিজের পুরো চেহারা ছেড়ে একটা ছোট চিহ্নের রূপ নেয়। সেই চিহ্নের নাম কার। কারের কথা একটু পরেই আসছে।</p>
+</section>
+
+<section id="benjon">
+  <p class="num">অধ্যায় ৪</p>
+  <h2>ব্যঞ্জনবর্ণ, বর্ণমালার বড় উঠোন</h2>
+  <p>ব্যঞ্জনবর্ণই বর্ণমালার সবচেয়ে বড় অংশ। এদের সাজানোর পেছনে আছে উচ্চারণের একটা সুন্দর যুক্তি। প্রথম পঁচিশটা বর্ণ পাঁচটা বর্গে ভাগ করা, আর প্রতিটা বর্গের নাম তার প্রথম বর্ণ থেকে। বর্গের বর্ণগুলো মুখের প্রায় একই জায়গা থেকে জন্ম নেয়। কণ্ঠ থেকে ক-বর্গ, তালু থেকে চ-বর্গ, আর এভাবে এগোতে এগোতে ঠোঁট পর্যন্ত গিয়ে প-বর্গ।</p>
+  <div class="grp">
+    <h3>ক-বর্গ</h3>
+    <div class="grid"><span>ক</span><span>খ</span><span>গ</span><span>ঘ</span><span>ঙ</span></div>
+  </div>
+  <div class="grp">
+    <h3>চ-বর্গ</h3>
+    <div class="grid"><span>চ</span><span>ছ</span><span>জ</span><span>ঝ</span><span>ঞ</span></div>
+  </div>
+  <div class="grp">
+    <h3>ট-বর্গ</h3>
+    <div class="grid"><span>ট</span><span>ঠ</span><span>ড</span><span>ঢ</span><span>ণ</span></div>
+  </div>
+  <div class="grp">
+    <h3>ত-বর্গ</h3>
+    <div class="grid"><span>ত</span><span>থ</span><span>দ</span><span>ধ</span><span>ন</span></div>
+  </div>
+  <div class="grp">
+    <h3>প-বর্গ</h3>
+    <div class="grid"><span>প</span><span>ফ</span><span>ব</span><span>ভ</span><span>ম</span></div>
+  </div>
+  <p>পাঁচ বর্গের পরে আরও কয়েকটা বর্ণ আছে, যারা কোনো বর্গে পড়ে না। এদের মধ্যে য, র, ল-কে অন্তঃস্থ বলা হয়, আর শ, ষ, স, হ-কে বলা হয় ঊষ্ম। এর পরে আছে ড়, ঢ়, য়, আর চারটে চিহ্নধর্মী বর্ণ, ৎ, ং, ঃ, ঁ। সব মিলিয়ে প্রচলিত হিসাবে ব্যঞ্জনবর্ণের সংখ্যা দাঁড়ায় ঊনচল্লিশ।</p>
+  <div class="grp">
+    <h3>অন্তঃস্থ</h3>
+    <div class="grid"><span>য</span><span>র</span><span>ল</span></div>
+  </div>
+  <div class="grp">
+    <h3>ঊষ্ম</h3>
+    <div class="grid"><span>শ</span><span>ষ</span><span>স</span><span>হ</span></div>
+  </div>
+  <div class="grp">
+    <h3>অন্যান্য</h3>
+    <div class="grid"><span>ড়</span><span>ঢ়</span><span>য়</span><span>ৎ</span><span>ং</span><span>ঃ</span><span>ঁ</span></div>
+  </div>
+  <p class="small">বর্ণের সংখ্যা নিয়ে বই আর পাঠ্যক্রমে সামান্য ভিন্নতা পাওয়া যায়। এখানে যে গোনা দেওয়া হয়েছে, সেটা সবচেয়ে প্রচলিত হিসাব।</p>
+</section>
+
+<section id="kar">
+  <p class="num">অধ্যায় ৫</p>
+  <h2>কার-চিহ্ন আর যুক্তবর্ণ</h2>
+  <p>ব্যঞ্জনবর্ণ একা লিখলে তার ভেতরে একটা অ-ধ্বনি লুকিয়ে থাকে। ক লিখলে আমরা পড়ি ক, অর্থাৎ ক আর অ মিলে। অন্য স্বর চাইলে ব্যঞ্জনের গায়ে কার-চিহ্ন বসাতে হয়।</p>
+  <ul class="rows">
+    <li><b>কা</b><span>আ-কার। ব্যঞ্জনের ডানে একটা দাঁড়ি পড়ে।</span></li>
+    <li><b>কি</b><span>ই-কার। এটা লেখায় ব্যঞ্জনের বাঁয়ে বসে, অথচ উচ্চারণে আসে পরে।</span></li>
+    <li><b>কু</b><span>উ-কার। ব্যঞ্জনের নিচে ছোট একটা বাঁক।</span></li>
+    <li><b>কে</b><span>এ-কার। ব্যঞ্জনের বাঁয়ে একটা ঢেউ।</span></li>
+    <li><b>কো</b><span>ও-কার। ব্যঞ্জনকে দুই দিক থেকে ঘিরে ধরে।</span></li>
+  </ul>
+  <p>ই-কারের এই ব্যাপারটা বাংলা লেখার একটা মজার দিক। আমরা বলি কি, কিন্তু কলম আগে চলে যায় বাঁ দিকে, তারপর ফিরে আসে ক-এর কাছে। লিপির নিয়ম আর উচ্চারণের ক্রম এখানে উল্টো পথে হাঁটছে, আর আমরা কেউ তা খেয়ালই করি না।</p>
+  <p class="big">ক্ষ, জ্ঞ, ন্ত, স্ব, ম্প</p>
+  <p>এগুলো যুক্তবর্ণ বা যুক্তাক্ষর। দুটো বা তিনটে ব্যঞ্জন মাঝখানে হসন্ত-এর সাহায্যে এক হয়ে একটা নতুন চেহারা নেয়। ক আর ষ মিলে ক্ষ হয়। জ আর ঞ মিলে জ্ঞ হয়। কোনোটা দেখলে মূল বর্ণ দুটো চেনা যায়, কোনোটা এতটাই বদলে যায় যে নতুন একটা অক্ষর বলে মনে হয়। যুক্তবর্ণ শেখা তাই একটু ধৈর্যের কাজ, তবে একবার চোখ অভ্যস্ত হয়ে গেলে লেখা পড়া অনেক দ্রুত হয়ে যায়।</p>
+</section>
+
+<section id="chapa">
+  <p class="num">অধ্যায় ৬</p>
+  <h2>ছাপাখানায় বাংলা</h2>
+  <p>হাতে লেখা থেকে ছাপার হরফে আসা বাংলা লিপির জীবনে একটা বড় মোড়। আঠারো শতকের শেষ দিকে বাংলা হরফে বই ছাপার চেষ্টা শুরু হয়। ১৭৭৮ সালে হুগলিতে ছাপা হয় নাথানিয়েল ব্রাসি হালহেডের লেখা এক ব্যাকরণ বই, আর সেই বইয়ের জন্য ধাতুর হরফ খোদাই করার কাজে বড় ভূমিকা ছিল চার্লস উইলকিন্সের। এটাকেই বাংলা ছাপার সূচনার একটা গুরুত্বপূর্ণ ধাপ ধরা হয়।</p>
+  <p>এর পর থেকে হরফের নকশা নিয়ে কাজ চলতে থাকে। ধাতুর ছাঁচ কাটা ছিল কঠিন শ্রমের কাজ। প্রতিটা অক্ষর আলাদা করে খোদাই করতে হতো, আর যুক্তবর্ণ ছিল সবচেয়ে বড় মাথাব্যথা, কারণ প্রতিটা সংযুক্তির জন্য আলাদা একটা হরফ লাগত। ফলে একটা ছাপাখানার বাংলা হরফের বাক্সে শত শত ছোট খোপ থাকত।</p>
+  <p>আজ আমরা কীবোর্ডে একটা অক্ষর চেপে লিখি, আর পর্দায় যুক্তবর্ণ নিজে থেকেই গড়ে ওঠে। ইউনিকোডে বাংলা অক্ষরের নিজস্ব জায়গা ঠিক করা আছে, তাই যে লেখাটা এখন আপনি পড়ছেন, সেটা অন্য ফোনে বা অন্য কম্পিউটারে খুললেও একই অক্ষরেই দেখা যাবে। ধাতুর হরফ থেকে ডিজিটাল ফন্ট, এই পথটা এক অর্থে সেই আদি খোদাইকারদেরই পথের শেষ প্রান্ত।</p>
+</section>
+
+<section id="ekush">
+  <p class="num">অধ্যায় ৭</p>
+  <h2>একুশ, যেদিন অক্ষরের দাম দেওয়া হলো</h2>
+  <p>১৯৫২ সালের একুশে ফেব্রুয়ারি ঢাকায় বাংলা ভাষার মর্যাদার দাবিতে মিছিল বের হয়েছিল। সেই দিন পুলিশের গুলিতে কয়েকজন ছাত্র ও সাধারণ মানুষ প্রাণ হারান। তাঁদের মৃত্যু ভাষা আন্দোলনের একটা স্থায়ী প্রতীক হয়ে ওঠে, আর পরের বছরগুলোতে সেই আন্দোলন বাংলাদেশের ইতিহাসের গভীর এক স্মৃতি হয়ে দাঁড়ায়।</p>
+  <p>এই অক্ষরগুলোর জন্য মানুষ প্রাণ দিয়েছিল, এই কথাটা মাথায় রেখে বর্ণমালার দিকে তাকালে চোখে এক ধরনের ভার পড়ে। ক খ গ ঘ আর শুধু ক খ গ ঘ থাকে না। প্রতিটা অক্ষরের পেছনে দাঁড়িয়ে থাকে অনেক মুখ।</p>
+  <p>১৯৯৯ সালের নভেম্বরে ইউনেস্কো একুশে ফেব্রুয়ারিকে আন্তর্জাতিক মাতৃভাষা দিবস হিসেবে ঘোষণা করে। ২০০০ সাল থেকে দিনটা বিশ্বজুড়ে পালিত হচ্ছে। এভাবে একটা ছোট ভূখণ্ডের ভাষার জন্য দেওয়া প্রাণ বিশ্বের সব মাতৃভাষার সম্মানের দিন হয়ে উঠেছে।</p>
+  <p class="big">মুখের ভাষা সবার আছে। অধিকারের লড়াইটা ছিল তাকে নিজের অক্ষরে লেখার।</p>
+</section>
+
+<section id="onko">
+  <p class="num">অধ্যায় ৮</p>
+  <h2>সংখ্যার অক্ষর</h2>
+  <p>অক্ষরের পাশে বাংলার নিজস্ব সংখ্যাও আছে। দশটা অঙ্ক, শূন্য থেকে নয়। দোকানের পুরোনো খাতায়, কবিতার পাতা-সংখ্যায়, বইয়ের সূচিতে আমরা এদের এখনো দেখি।</p>
+  <div class="grp">
+    <h3>বাংলা অঙ্ক</h3>
+    <div class="grid"><span>০</span><span>১</span><span>২</span><span>৩</span><span>৪</span><span>৫</span><span>৬</span><span>৭</span><span>৮</span><span>৯</span></div>
+  </div>
+  <p>আজকাল ফোনের পর্দায় ইংরেজি অঙ্কই বেশি চোখে পড়ে, তবে বাংলা অঙ্কের একটা আলাদা টান আছে। ৪, ৫ আর ৯-এর বাঁকগুলো দেখলে বোঝা যায়, সংখ্যারাও একই লিপির বংশের সন্তান। তারাও মাথার ওপর মাত্রা টানে না ঠিকই, কিন্তু অক্ষরের সঙ্গে এক হাতের লেখা বলে মনে হয়।</p>
+</section>
+
+</main>
+
+<div class="wrap">
+  <footer>
+    <p class="end">পাতাটা শেষ হলো।</p>
+    <p class="small">অক্ষর গুনে দেখার দরকার নেই। যে কটা পড়লেন, তার সবগুলোর পেছনেই কেউ না কেউ কলম ধরেছিলেন। এবার নিজের একটা লাইন লিখে ফেলুন।</p>
+  </footer>
+</div>
+
+<script>
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({ pageLanguage: 'bn', autoDisplay: false }, 'google_translate_element');
+}
+document.getElementById('menubtn').addEventListener('click', function () {
+  var p = document.getElementById('panel');
+  p.hidden = !p.hidden;
+  this.setAttribute('aria-expanded', String(!p.hidden));
+});
+</script>
+<script>
+(function () {
+  var sheet = document.getElementById('langsheet'), list = document.getElementById('langlist'), q = document.getElementById('langq');
+  var current = 'bn', items = [];
+  function combo() { return document.querySelector('select.goog-te-combo'); }
+  function native(code) {
+    try { var n = new Intl.DisplayNames([code], { type: 'language' }).of(code); return n && n !== code ? n : ''; } catch (e) { return ''; }
+  }
+  function openSheet() { sheet.hidden = false; document.body.style.overflow = 'hidden'; setTimeout(function () { q.focus(); }, 50); }
+  function closeSheet() { sheet.hidden = true; document.body.style.overflow = ''; }
+  function resetToBengali() {
+    var h = location.hostname, exp = '; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
+    document.cookie = 'googtrans=' + exp;
+    document.cookie = 'googtrans=' + exp + '; domain=' + h;
+    document.cookie = 'googtrans=' + exp + '; domain=.' + h;
+    location.reload();
+  }
+  function pick(code) {
+    var c = combo(); if (!c) return;
+    c.value = code; c.dispatchEvent(new Event('change'));
+    current = code; closeSheet();
+    document.getElementById('panel').hidden = true;
+    document.getElementById('menubtn').setAttribute('aria-expanded', 'false');
+  }
+  function render() {
+    var term = q.value.trim().toLowerCase();
+    list.innerHTML = '';
+    var r = document.createElement('button'); r.type = 'button'; r.className = 'lang reset';
+    r.innerHTML = '<span class="nat">বাংলা (মূল ভাষা)</span><span class="en">অনুবাদ বন্ধ করে আগের অবস্থায় ফিরুন</span>';
+    r.addEventListener('click', resetToBengali); list.appendChild(r);
+    items.filter(function (it) { return !term || (it.en + ' ' + it.nat + ' ' + it.code).toLowerCase().indexOf(term) > -1; }).forEach(function (it) {
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'lang' + (it.code === current ? ' on' : '');
+      var a = document.createElement('span'); a.className = 'nat'; a.textContent = it.nat || it.en;
+      var e = document.createElement('span'); e.className = 'en'; e.textContent = it.nat ? it.en : '';
+      b.appendChild(a); if (it.nat) b.appendChild(e);
+      b.addEventListener('click', function () { pick(it.code); });
+      list.appendChild(b);
+    });
+  }
+  function build() {
+    var c = combo(); if (!c || c.options.length < 2) return false;
+    items = [].slice.call(c.options).filter(function (o) { return o.value; }).map(function (o) { return { code: o.value, en: o.text, nat: native(o.value) }; });
+    render(); return true;
+  }
+  document.getElementById('langbtn').addEventListener('click', openSheet);
+  document.getElementById('langclose').addEventListener('click', closeSheet);
+  document.addEventListener('keydown', function (ev) { if (ev.key === 'Escape') closeSheet(); });
+  q.addEventListener('input', function () { if (items.length) render(); });
+  var tries = 0, t = setInterval(function () {
+    if (build()) { clearInterval(t); return; }
+    if (++tries > 60) { clearInterval(t); list.innerHTML = '<p class="empty">গুগল ট্রান্সলেট লোড হয়নি। ইন্টারনেট আছে কি না দেখুন, আর ফাইলটা ওয়েবসাইট হিসেবে চালান।</p>'; }
+  }, 300);
+})();
+</script>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>
